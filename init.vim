@@ -113,7 +113,12 @@ Plugin 'neovim/nvim-lspconfig'
 Plugin 'williamboman/nvim-lsp-installer'
 
 " Plugin 'ycm-core/YouCompleteMe'
-Plugin 'hrsh7th/nvim-compe'
+" Plugin 'hrsh7th/nvim-compe'
+Plugin 'hrsh7th/cmp-nvim-lsp'
+Plugin 'hrsh7th/cmp-buffer'
+Plugin 'hrsh7th/cmp-path'
+Plugin 'hrsh7th/cmp-cmdline'
+Plugin 'hrsh7th/nvim-cmp'
 Plugin 'fatih/vim-go'
 
 Plugin 'kaicataldo/material.vim'
@@ -165,54 +170,54 @@ let g:rainbow_active = 1
 "fzf
 lua << EOF
 require('lspfuzzy').setup {
-  methods = 'all',         -- either 'all' or a list of LSP methods (see below)
-  jump_one = true,         -- jump immediately if there is only one location
-  fzf_preview = {          -- arguments to the FZF '--preview-window' option
+    methods = 'all',         -- either 'all' or a list of LSP methods (see below)
+    jump_one = true,         -- jump immediately if there is only one location
+    fzf_preview = {          -- arguments to the FZF '--preview-window' option
     'up:+{2}-/2'          -- preview on the right and centered on entry
-  },
-  fzf_action = {           -- FZF actions
-    ['ctrl-t'] = 'tabedit',  -- go to location in a new tab
-    ['ctrl-v'] = 'vsplit',   -- go to location in a vertical split
-    ['ctrl-x'] = 'split',    -- go to location in a horizontal split
-  },
+    },
+fzf_action = {           -- FZF actions
+['ctrl-t'] = 'tabedit',  -- go to location in a new tab
+['ctrl-v'] = 'vsplit',   -- go to location in a vertical split
+['ctrl-x'] = 'split',    -- go to location in a horizontal split
+},
   fzf_modifier = ':~:.',   -- format FZF entries, see |filename-modifiers|
   fzf_trim = true,         -- trim FZF entries
-}
+  }
 EOF
 " lsp
 " LSPINSTALLER START
 lua << EOF
 local lsp_installer = require("nvim-lsp-installer")
 lsp_installer.on_server_ready(function(server)
-    local opts = {}
+local opts = {}
 
-    -- (optional) Customize the options passed to the server
-    -- if server.name == "tsserver" then
-    --     opts.root_dir = function() ... end
-    -- end
+-- (optional) Customize the options passed to the server
+-- if server.name == "tsserver" then
+--     opts.root_dir = function() ... end
+-- end
 
-    -- This setup() function is exactly the same as lspconfig's setup function.
-    -- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-    server:setup(opts)
+-- This setup() function is exactly the same as lspconfig's setup function.
+-- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+server:setup(opts)
 end)
 local lsp_installer_servers = require'nvim-lsp-installer.servers'
 local server_available, requested_server = lsp_installer_servers.get_server("rust_analyzer")
 if server_available then
     requested_server:on_ready(function ()
-        local opts = {}
-        requested_server:setup(opts)
-    end)
-    if not requested_server:is_installed() then
-        -- Queue the server to be installed
-        requested_server:install()
-    end
+    local opts = {}
+    requested_server:setup(opts)
+end)
+if not requested_server:is_installed() then
+    -- Queue the server to be installed
+    requested_server:install()
+end
 end
 lsp_installer.settings({
-    ui = {
-        icons = {
-            server_installed = "✓",
-            server_pending = "➜",
-            server_uninstalled = "✗"
+ui = {
+    icons = {
+        server_installed = "✓",
+        server_pending = "➜",
+        server_uninstalled = "✗"
         }
     }
 })
@@ -221,17 +226,17 @@ EOF
 " LSPINSTALL START
 " lua << EOF
 " local function setup_servers()
-  " require'lspinstall'.setup()
-  " local servers = require'lspinstall'.installed_servers()
-  " for _, server in pairs(servers) do
-    " require'lspconfig'[server].setup{}
-  " end
+" require'lspinstall'.setup()
+" local servers = require'lspinstall'.installed_servers()
+" for _, server in pairs(servers) do
+" require'lspconfig'[server].setup{}
+" end
 " end
 " setup_servers()
 " -- Automatically reload after `:LspInstall <server>` so we don't have to restart neovim
 " require'lspinstall'.post_install_hook = function ()
-  " setup_servers() -- reload installed servers
-  " vim.cmd("bufdo e") -- this triggers the FileType autocmd that starts the server
+" setup_servers() -- reload installed servers
+" vim.cmd("bufdo e") -- this triggers the FileType autocmd that starts the server
 " end
 " EOF
 " LSPINSTALL END
@@ -290,17 +295,17 @@ let g:NERDTreeFileExtensionHighlightFullName = 1
 " let g:Lf_WindowPosition = 'popup'
 " let g:Lf_PreviewInPopup = 1
 " let g:Lf_PreviewResult = {
-        " \ 'File': 0,
-        " \ 'Buffer': 0,
-        " \ 'Mru': 0,
-        " \ 'Tag': 0,
-        " \ 'BufTag': 1,
-        " \ 'Function': 1,
-        " \ 'Line': 1,
-        " \ 'Colorscheme': 0,
-        " \ 'Rg': 0,
-        " \ 'Gtags': 0
-        " \}
+" \ 'File': 0,
+" \ 'Buffer': 0,
+" \ 'Mru': 0,
+" \ 'Tag': 0,
+" \ 'BufTag': 1,
+" \ 'Function': 1,
+" \ 'Line': 1,
+" \ 'Colorscheme': 0,
+" \ 'Rg': 0,
+" \ 'Gtags': 0
+" \}
 " let g:Lf_ShortcutF = "<leader>ff"
 noremap <leader>ff :<C-U><C-R>=printf("Files")<CR><CR>
 " noremap <leader>fm :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
@@ -328,35 +333,60 @@ noremap <C-D> :<C-U><C-R>=printf("Rg %s", expand("<cword>"))<CR>
 
 " neovim不支持这种弹框
 " set completeopt += popup
-lua << EOF
-vim.o.completeopt = "menuone,noselect"
+set completeopt=menu,menuone,noselect
+
+" nvim-cmp
+  lua <<EOF
+    local cmp = require'cmp'
+    -- Global setup.
+    cmp.setup({
+      snippet = {
+        expand = function(args)
+          vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+          -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+          -- require'snippy'.expand_snippet(args.body) -- For `snippy` users.
+          -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+        end,
+      },
+      mapping = {
+        ['<C-j>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 's' }),
+        ['<C-k>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 's' }),
+        ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+        ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+        ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+        ['<C-e>'] = cmp.mapping({
+          i = cmp.mapping.abort(),
+          c = cmp.mapping.close(),
+        }),
+        -- Accept currently selected item. If none selected, `select` first item.
+        -- Set `select` to `false` to only confirm explicitly selected items.
+        ['<CR>'] = cmp.mapping.confirm({ select = true }),
+      },
+      sources = cmp.config.sources({
+        { name = 'nvim_lsp' },
+        { name = 'vsnip' }, -- For vsnip users.
+        -- { name = 'luasnip' }, -- For luasnip users.
+        -- { name = 'snippy' }, -- For snippy users.
+        -- { name = 'ultisnips' }, -- For ultisnips users.
+      }, {
+        { name = 'buffer' },
+      })
+    })
+    -- `/` cmdline setup.
+    cmp.setup.cmdline('/', {
+      sources = {
+        { name = 'buffer' }
+      }
+    })
+    -- `:` cmdline setup.
+    cmp.setup.cmdline(':', {
+      sources = cmp.config.sources({
+        { name = 'path' }
+      }, {
+        { name = 'cmdline' }
+      })
+    })
 EOF
-
-let g:compe = {}
-let g:compe.enabled = v:true
-let g:compe.autocomplete = v:true
-let g:compe.debug = v:false
-let g:compe.min_length = 2
-let g:compe.preselect = 'enable'
-let g:compe.throttle_time = 80
-let g:compe.source_timeout = 200
-let g:compe.resolve_timeout = 800
-let g:compe.incomplete_delay = 400
-let g:compe.max_abbr_width = 100
-let g:compe.max_kind_width = 100
-let g:compe.max_menu_width = 100
-let g:compe.documentation = v:true
-
-let g:compe.source = {}
-let g:compe.source.path = v:true
-let g:compe.source.buffer = v:false
-let g:compe.source.calc = v:true
-let g:compe.source.nvim_lsp = v:true
-let g:compe.source.nvim_lua = v:true
-let g:compe.source.vsnip = v:true
-let g:compe.source.ultisnips = v:true
-let g:compe.source.luasnip = v:true
-let g:compe.source.emoji = v:false
 
 " 语法检查
 let g:ale_sign_error = 'x'
