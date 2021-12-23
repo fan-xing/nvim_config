@@ -124,7 +124,7 @@ Plugin 'fatih/vim-go'
 Plugin 'kaicataldo/material.vim'
 
 Plugin 'tpope/vim-fugitive'
-
+Plugin 'junegunn/gv.vim'
 Plugin 'airblade/vim-gitgutter'
 
 Plugin 'vim-airline/vim-airline'
