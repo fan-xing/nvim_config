@@ -23,7 +23,8 @@ set nocompatible
 " set mouse+=a
 
 " y复制到mac里
-set clipboard=unnamed
+" set clipboard=unnamed
+set clipboard=unnamedplus
 "删除模式
 "set backspace=2
 
