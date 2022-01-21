@@ -9,10 +9,10 @@ set nu
 " colorscheme gruvbox
 " colorscheme molokai
 " colorscheme seoul256
-colorscheme onehalflight
+" colorscheme onehalflight
 
-" let g:gruvbox_contrast_dark = "soft"
-let g:gruvbox_contrast_light = "soft"
+let g:gruvbox_contrast_dark = "soft"
+" let g:gruvbox_contrast_light = "soft"
 set t_Co=256
 
 " Load the colorscheme
@@ -144,7 +144,7 @@ Plugin 'rodnaph/vim-color-schemes'
 
 " Plugin 'bkbncn/vim-colorschemes-picker'
 
-Plugin 'overcache/NeoSolarized'
+" Plugin 'overcache/NeoSolarized'
 
 Plugin 'scrooloose/nerdcommenter'
 
@@ -155,15 +155,33 @@ Plugin 'ojroques/nvim-lspfuzzy'
 Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plugin 'junegunn/fzf.vim'
 
-Plugin 'morhetz/gruvbox'
+" Plugin 'morhetz/gruvbox'
 " Plugin 'jacoborus/tender'
 " Plugin 'projekt0n/github-nvim-theme'
 " Plugin 'ayu-theme/ayu-vim'
 " Plugin 'junegunn/seoul256.vim'
-Plugin 'sonph/onehalf', { 'rtp': 'vim' }
+" Plugin 'sonph/onehalf', { 'rtp': 'vim' }
+Plugin 'navarasu/onedark.nvim'
 
 call vundle#end()            " 这是必需的
 filetype plugin indent on    " 这是必需的
+
+" onedark主题
+lua << EOF
+require('onedark').setup {
+    style = 'darker',
+    colors = {
+        bright_orange = "#ff8800",    -- define a new color
+        green = '#00ffaa',            -- redefine an existing color
+        },
+    highlights = {
+        TSKeyword = {fg = '$green'},
+        TSString = {fg = '$bright_orange', bg = '#00ff00', fmt = 'bold'},
+        TSFunction = {fg = '#0000ff', sp = '$cyan', fmt = 'underline,italic'},
+        }
+    }
+require('onedark').load()
+EOF
 
 "括号
 let g:rainbow_active = 1
@@ -247,6 +265,8 @@ inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 
 "git检查更新时间
 set updatetime=100
+noremap <C-d>:<C-U><C-R>=printf("")<CR><CR>
+nmap <S-d> :Gdiffsplit<CR>
 
 " tabline
 let g:airline#extensions#tabline#enabled = 1
@@ -261,9 +281,13 @@ noremap <C-l> :<C-U><C-R>=printf("bn")<CR><CR>
 set laststatus=2
 " let g:airline_theme='jellybeans'
 " let g:airline_theme='wombat'
-let g:airline_theme='xtermlight'
-let g:airline_section_z = "%P:%l/%L-%c"
-let g:airline_section_c = "[%n]%f"
+" let g:airline_theme='xtermlight'
+" let g:airline_theme='molokai'
+" let g:airline_theme='base16'
+let g:airline_theme='onedark'
+" %{strftime("%Y-%m-%d %H:%M:%S")}
+let g:airline_section_z = '%P-%l/%L-%c'
+let g:airline_section_c = '[%n]%f'
 let g:airline#extensions#hunks#enabled= 0
 let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#ale#enabled = 1
@@ -380,14 +404,14 @@ set completeopt=menu,menuone,noselect
         { name = 'buffer' }
       }
     })
-    -- `:` cmdline setup.
-    cmp.setup.cmdline(':', {
-      sources = cmp.config.sources({
-        { name = 'path' }
-      }, {
-        { name = 'cmdline' }
-      })
-    })
+--    -- `:` cmdline setup.
+--    cmp.setup.cmdline(':', {
+--      sources = cmp.config.sources({
+--        { name = 'path' }
+--      }, {
+--        { name = 'cmdline' }
+--      })
+--    })
 EOF
 
 " 语法检查
