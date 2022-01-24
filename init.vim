@@ -265,7 +265,6 @@ inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 
 "git检查更新时间
 set updatetime=100
-noremap <C-d>:<C-U><C-R>=printf("")<CR><CR>
 nmap <S-d> :Gdiffsplit<CR>
 
 " tabline
