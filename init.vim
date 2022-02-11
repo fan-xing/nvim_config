@@ -14,6 +14,7 @@ set nu
 let g:gruvbox_contrast_dark = "soft"
 " let g:gruvbox_contrast_light = "soft"
 set t_Co=256
+set background=dark
 
 " Load the colorscheme
 " 不要使用vi的键盘模式，而是vim自己的
