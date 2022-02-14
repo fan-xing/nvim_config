@@ -164,6 +164,8 @@ Plugin 'junegunn/fzf.vim'
 " Plugin 'sonph/onehalf', { 'rtp': 'vim' }
 Plugin 'navarasu/onedark.nvim'
 
+Plugin 'iamcco/markdown-preview.nvim'
+
 call vundle#end()            " 这是必需的
 filetype plugin indent on    " 这是必需的
 
