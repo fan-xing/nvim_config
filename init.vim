@@ -73,11 +73,6 @@ set ic
 " inoremap ' ''<ESC>i
 " inoremap " ""<ESC>i
 " inoremap ( ()<ESC>i
-inoremap [] []<left>
-inoremap {} {}<left>
-inoremap '' ''<left>
-inoremap "" ""<left>
-inoremap () ()<left>
 
 "右下标尺
 set ruler
