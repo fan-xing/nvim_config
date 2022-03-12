@@ -2,6 +2,7 @@
 let mapleader = " "
 "行号
 set nu
+set relativenumber
 
 "主题也搞一下吧
 "let g:colorscheme_user_path = '~/.vim/bundle/vim-colorschemes/colors'
@@ -67,11 +68,16 @@ let loaded_matchparen=0
 set ic
 
 "补全
-"inoremap [ []<ESC>i
-"inoremap { {}<ESC>i
-"inoremap ' ''<ESC>i
-"inoremap " ""<ESC>i
-"inoremap ( ()<ESC>i
+" inoremap [ []<ESC>i
+" inoremap { {}<ESC>i
+" inoremap ' ''<ESC>i
+" inoremap " ""<ESC>i
+" inoremap ( ()<ESC>i
+inoremap [] []<left>
+inoremap {} {}<left>
+inoremap '' ''<left>
+inoremap "" ""<left>
+inoremap () ()<left>
 
 "右下标尺
 set ruler
@@ -92,7 +98,7 @@ set autoread
 set nocompatible              " 这是必需的 
 filetype off                  " 这是必需的 
 
-set cscopeprg='~/.vim/bundle/vim-gutentags/autoload/gutentags/gtags_cscope.vim'
+" set cscopeprg='~/.vim/bundle/vim-gutentags/autoload/gutentags/gtags_cscope.vim'
 
 " 在此设置运行时路径 
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -156,6 +162,9 @@ Plugin 'ojroques/nvim-lspfuzzy'
 Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plugin 'junegunn/fzf.vim'
 
+" 翻译
+Plugin 'voldikss/vim-translator'
+
 " Plugin 'morhetz/gruvbox'
 " Plugin 'jacoborus/tender'
 " Plugin 'projekt0n/github-nvim-theme'
@@ -164,10 +173,14 @@ Plugin 'junegunn/fzf.vim'
 " Plugin 'sonph/onehalf', { 'rtp': 'vim' }
 Plugin 'navarasu/onedark.nvim'
 
-Plugin 'iamcco/markdown-preview.nvim'
+" 平滑移动
+Plugin 'psliwka/vim-smoothie'
 
 call vundle#end()            " 这是必需的
 filetype plugin indent on    " 这是必需的
+
+"括号
+let g:rainbow_active = 1
 
 " onedark主题
 lua << EOF
@@ -185,10 +198,6 @@ require('onedark').setup {
     }
 require('onedark').load()
 EOF
-
-"括号
-let g:rainbow_active = 1
-
 "fzf
 lua << EOF
 require('lspfuzzy').setup {
@@ -263,7 +272,7 @@ EOF
 " EOF
 " LSPINSTALL END
 "补全
-inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+" inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 " inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 "git检查更新时间
@@ -356,7 +365,7 @@ nnoremap <silent><leader>fk <cmd>lua vim.lsp.buf.hover()<CR>'
 
 " noremap <C-D> :<C-U><C-R>=printf("Leaderf! rg -g '*.php' -g '*.go' -e %s", expand("<cword>"))<CR>
 " noremap <leader>rg :<C-U><C-R>=printf("Leaderf! rg ")<CR>
-noremap <C-D> :<C-U><C-R>=printf("Rg %s", expand("<cword>"))<CR>
+" noremap <C-D> :<C-U><C-R>=printf("Rg %s", expand("<cword>"))<CR>
 
 " neovim不支持这种弹框
 " set completeopt += popup
@@ -379,6 +388,7 @@ set completeopt=menu,menuone,noselect
         ['<C-j>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 's' }),
         ['<C-k>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 's' }),
         ['<tab>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 's' }),
+        ['<S-tab>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 's' }),
         ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
         ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
         ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
@@ -425,6 +435,10 @@ let g:ale_set_highlights = 0
 " 注释的时候自动加个空格, 强迫症必配
 let g:NERDSpaceDelims=1
 let g:NERDDefaultAlign='left'
+
+" 翻译
+let g:translator_default_engines = ['bing','google']
+let g:translator_proxy_url = 'socks5://127.0.0.1:1086'
 
 " 自定义快捷键
 noremap <leader>fw :<C-U><C-R>=printf("/%s\\C", expand("<cword>"))<CR><CR>
