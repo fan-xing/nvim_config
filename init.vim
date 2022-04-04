@@ -12,10 +12,9 @@ set relativenumber
 " colorscheme seoul256
 " colorscheme onehalflight
 
-let g:gruvbox_contrast_dark = "soft"
+" let g:gruvbox_contrast_dark = "dark"
 " let g:gruvbox_contrast_light = "soft"
 set t_Co=256
-set background=dark
 
 " Load the colorscheme
 " 不要使用vi的键盘模式，而是vim自己的
@@ -153,20 +152,28 @@ Plugin 'scrooloose/nerdcommenter'
 "彩虹括号
 " Plugin 'luochen1990/rainbow'
 
-Plugin 'ojroques/nvim-lspfuzzy'
-Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plugin 'junegunn/fzf.vim'
+" Plugin 'ojroques/nvim-lspfuzzy'
+" Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
+" Plugin 'junegunn/fzf.vim'
+
+Plugin 'ap/vim-css-color'
+
+Plugin 'nvim-lua/plenary.nvim'
+Plugin 'nvim-telescope/telescope.nvim'
 
 " 翻译
 Plugin 'voldikss/vim-translator'
 
-" Plugin 'morhetz/gruvbox'
-" Plugin 'jacoborus/tender'
-" Plugin 'projekt0n/github-nvim-theme'
-" Plugin 'ayu-theme/ayu-vim'
-" Plugin 'junegunn/seoul256.vim'
-" Plugin 'sonph/onehalf', { 'rtp': 'vim' }
+" colors
+Plugin 'morhetz/gruvbox'
+Plugin 'jacoborus/tender'
+Plugin 'projekt0n/github-nvim-theme'
+Plugin 'ayu-theme/ayu-vim'
+Plugin 'junegunn/seoul256.vim'
+Plugin 'sonph/onehalf', { 'rtp': 'vim' }
 Plugin 'navarasu/onedark.nvim'
+Plugin 'catppuccin/nvim', {'name': 'catppuccin'}
+Plugin 'marko-cerovac/material.nvim'
 
 " 平滑移动
 Plugin 'psliwka/vim-smoothie'
@@ -179,37 +186,189 @@ let g:rainbow_active = 1
 
 " onedark主题
 lua << EOF
-require('onedark').setup {
-    style = 'darker',
-    colors = {
-        bright_orange = "#ff8800",    -- define a new color
-        green = '#00ffaa',            -- redefine an existing color
-        },
-    highlights = {
-        TSKeyword = {fg = '$green'},
-        TSString = {fg = '$bright_orange', bg = '#00ff00', fmt = 'bold'},
-        TSFunction = {fg = '#0000ff', sp = '$cyan', fmt = 'underline,italic'},
-        }
-    }
-require('onedark').load()
+-- require('onedark').setup {
+--     style = 'darker',
+--     colors = {
+--         bright_orange = "#ff8800",    -- define a new color
+--         green = '#00ffaa',            -- redefine an existing color
+--         },
+--     highlights = {
+--         TSKeyword = {fg = '$green'},
+--         TSString = {fg = '$bright_orange', bg = '#00ff00', fmt = 'bold'},
+--         TSFunction = {fg = '#0000ff', sp = '$cyan', fmt = 'underline,italic'},
+--         }
+--     }
+-- require('onedark').load()
 EOF
-"fzf
+
+"catppuccin
 lua << EOF
-require('lspfuzzy').setup {
-    methods = 'all',         -- either 'all' or a list of LSP methods (see below)
-    jump_one = true,         -- jump immediately if there is only one location
-    fzf_preview = {          -- arguments to the FZF '--preview-window' option
-    'up:+{2}-/2'          -- preview on the right and centered on entry
-    },
-fzf_action = {           -- FZF actions
-['ctrl-t'] = 'tabedit',  -- go to location in a new tab
-['ctrl-v'] = 'vsplit',   -- go to location in a vertical split
-['ctrl-x'] = 'split',    -- go to location in a horizontal split
+local catppuccin = require("catppuccin")
+-- configure it
+catppuccin.setup{
+transparent_background = true,
+term_colors = false,
+styles = {
+    comments = "italic",
+    functions = "italic",
+    keywords = "italic",
+    strings = "NONE",
+    variables = "italic",
 },
-  fzf_modifier = ':~:.',   -- format FZF entries, see |filename-modifiers|
-  fzf_trim = true,         -- trim FZF entries
-  }
+integrations = {
+    treesitter = true,
+    native_lsp = {
+        enabled = true,
+        virtual_text = {
+            errors = "italic",
+            hints = "italic",
+            warnings = "italic",
+            information = "italic",
+        },
+        underlines = {
+            errors = "underline",
+            hints = "underline",
+            warnings = "underline",
+            information = "underline",
+        },
+    },
+    lsp_trouble = false,
+    cmp = true,
+    lsp_saga = false,
+    gitgutter = false,
+    gitsigns = true,
+    telescope = true,
+    nvimtree = {
+        enabled = true,
+        show_root = false,
+        transparent_panel = false,
+    },
+    neotree = {
+        enabled = false,
+        show_root = false,
+        transparent_panel = false,
+    },
+    which_key = false,
+    indent_blankline = {
+        enabled = true,
+        colored_indent_levels = false,
+    },
+    dashboard = true,
+    neogit = false,
+    vim_sneak = false,
+    fern = false,
+    barbar = false,
+    bufferline = true,
+    markdown = true,
+    lightspeed = false,
+    ts_rainbow = false,
+    hop = false,
+    notify = true,
+    telekasten = true,
+    symbols_outline = true,
+}
+}
 EOF
+colorscheme catppuccin
+
+" github-nvim-theme
+" lua << EOF
+" require('github-theme').setup({
+"     transparent = true,
+"     theme_style = "dark_default",
+"     --theme_style = "dark",
+"     --theme_style = "dark_colorblind",
+"     --theme_style = "light",
+"     --theme_style = "light_default",
+"     --theme_style = "light_colorblind",
+"     --theme_style = "dimmed",
+"     -- other config
+"     sidebars = {"qf", "vista_kind", "terminal", "packer"},
+"     -- Change the "hint" color to the "orange" color, and make the "error" color bright red
+"     colors = {hint = "orange", error = "#ff0000"},
+
+"     -- Overwrite the highlight groups
+"     overrides = function(c)
+"     return {
+"         htmlTag = {fg = c.red, bg = "#282c34", sp = c.hint, style = "underline"},
+"         DiagnosticHint = {link = "LspDiagnosticsDefaultHint"},
+"         -- this will remove the highlight groups
+"         TSField = {},
+"         }
+" end
+" })
+" EOF
+
+"lspfuzzy
+" lua << EOF
+" --require('lspfuzzy').setup {
+" --    methods = 'all',         -- either 'all' or a list of LSP methods (see below)
+" --    jump_one = true,         -- jump immediately if there is only one location
+" --    fzf_preview = {          -- arguments to the FZF '--preview-window' option
+" --    'up:+{2}-/2'          -- preview on the right and centered on entry
+" --    },
+" --fzf_action = {           -- FZF actions
+" --['ctrl-t'] = 'tabedit',  -- go to location in a new tab
+" --['ctrl-v'] = 'vsplit',   -- go to location in a vertical split
+" --['ctrl-x'] = 'split',    -- go to location in a horizontal split
+" --},
+" --  fzf_modifier = ':~:.',   -- format FZF entries, see |filename-modifiers|
+" --  fzf_trim = true,         -- trim FZF entries
+" --  }
+" EOF
+
+" telescope
+lua << EOF
+local action_layout = require('telescope.actions.layout')
+require('telescope').setup{
+  defaults = {
+    -- Default configuration for telescope goes here:
+    -- config_key = value,
+    mappings = {
+        i = {
+            -- map actions.which_key to <C-h> (default: <C-/>)
+            -- actions.which_key shows the mappings for your picker,
+            -- e.g. git_{create, delete, ...}_branch for the git_branches picker
+            ["<C-b>"] = "preview_scrolling_up",
+            ["<C-f>"] = "preview_scrolling_down",
+            ["<C-j>"] = "move_selection_next",
+            ["<C-k>"] = "move_selection_previous",
+            ["<C-q>"] = "close",
+            ["<C-p>"] = action_layout.toggle_preview
+        },
+        n = {
+            ["<C-q>"] = "close",
+            ["<C-p>"] = action_layout.toggle_preview
+        }
+    },
+    layout_strategy = "horizontal",
+    sorting_strategy = "ascending",
+    layout_config = {
+        horizontal = {
+            height = 0.5,
+            width = 0.8,
+            prompt_position = "top",
+        },
+        -- other layout configuration here
+    },
+    preview = {
+        hide_on_startup = true
+    }
+    -- other defaults configuration here
+  } 
+}
+EOF
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fm <cmd>Telescope oldfiles<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>rg <cmd>Telescope grep_string<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fo <cmd>Telescope lsp_document_symbols<cr>
+nnoremap <leader>fr <cmd>Telescope lsp_references<cr>
+nnoremap <leader>fd <cmd>Telescope lsp_definitions<cr>
+nnoremap <leader>fe <cmd>Telescope diagnostics bufnr=0<cr>
+nnoremap <leader>fp <cmd>Telescope quickfix<cr>
+
 " lsp
 " LSPINSTALLER START
 lua << EOF
@@ -248,6 +407,7 @@ ui = {
     }
 })
 EOF
+
 " LSPINSTALLER END
 " LSPINSTALL START
 " lua << EOF
@@ -290,10 +450,11 @@ set laststatus=2
 " let g:airline_theme='xtermlight'
 " let g:airline_theme='molokai'
 " let g:airline_theme='base16'
-let g:airline_theme='onedark'
+" let g:airline_theme='onedark'
+let g:airline_theme='transparent'
 " %{strftime("%Y-%m-%d %H:%M:%S")}
-let g:airline_section_z = '%P-%l/%L-%c'
-let g:airline_section_c = '[%n]%f'
+" let g:airline_section_z = '%P-%l/%L-%c'
+" let g:airline_section_c = '[%n]%f'
 let g:airline#extensions#hunks#enabled= 0
 let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#ale#enabled = 1
@@ -302,9 +463,8 @@ let airline#extensions#ale#warning_symbol = 'W:'
 let airline#extensions#ale#error_symbol = 'E:'
 let g:airline#extensions#fugitiveline#enabled = 1
 let g:airline#extensions#searchcount#enabled = 1 
-
 " 使用 powerline 外观
-let g:airline_powerline_fonts = 1
+" let g:airline_powerline_fonts = 1
 
 "目录收藏默认打开
 let NERDTreeShowBookmarks=1
@@ -338,20 +498,20 @@ let g:NERDTreeFileExtensionHighlightFullName = 1
 " \ 'Gtags': 0
 " \}
 " let g:Lf_ShortcutF = "<leader>ff"
-noremap <leader>ff :<C-U><C-R>=printf("Files")<CR><CR>
+" noremap <leader>ff :<C-U><C-R>=printf("Files")<CR><CR>
 " noremap <leader>fm :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
-noremap <leader>fm :<C-U><C-R>=printf("History")<CR><CR>
-noremap <leader>fo :<C-U><C-R>=printf("BTags")<CR><CR>
+" noremap <leader>fm :<C-U><C-R>=printf("History")<CR><CR>
+" noremap <leader>fo :<C-U><C-R>=printf("BTags")<CR><CR>
 " noremap <leader>fo :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
 " noremap <leader>fl :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
-noremap <leader>fl :<C-U><C-R>=printf("BLines")<CR><CR>
+" noremap <leader>fl :<C-U><C-R>=printf("BLines")<CR><CR>
 " noremap <leader>fo :<C-U><C-R>=printf("LeaderfFunction")<CR><CR>
 
 " should use `Leaderf gtags --update` first
 let g:Lf_GtagsAutoGenerate = 1
 let g:Lf_Gtagslabel = 'native-pygments'
-nnoremap <silent><leader>fr <cmd>lua vim.lsp.buf.references()<CR>
-nnoremap <silent><leader>fd <cmd>lua vim.lsp.buf.definition()<CR>
+" nnoremap <silent><leader>fr <cmd>lua vim.lsp.buf.references()<CR>
+" nnoremap <silent><leader>fd <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent><leader>fk <cmd>lua vim.lsp.buf.hover()<CR>'
 " noremap <leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --result ctags-x", expand("<cword>"))<CR><CR>
 " noremap <leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --result ctags-x", expand("<cword>"))<CR><CR>
@@ -359,8 +519,8 @@ nnoremap <silent><leader>fk <cmd>lua vim.lsp.buf.hover()<CR>'
 "noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s --result ctags-x ", "")<CR><CR>
 
 " noremap <C-D> :<C-U><C-R>=printf("Leaderf! rg -g '*.php' -g '*.go' -e %s", expand("<cword>"))<CR>
-" noremap <leader>rg :<C-U><C-R>=printf("Leaderf! rg ")<CR>
-" noremap <C-D> :<C-U><C-R>=printf("Rg %s", expand("<cword>"))<CR>
+" noremap <leader>fg :<C-U><C-R>=printf("Leaderf! rg ")<CR>
+" noremap <leader>rg :<C-U><C-R>=printf("Rg %s", expand("<cword>"))<CR>
 
 " neovim不支持这种弹框
 " set completeopt += popup
@@ -445,3 +605,7 @@ nmap w] :resize +2<CR>
 nmap w[ :resize -2<CR>
 nmap w- :vertical resize -2<CR>
 nmap w= :vertical resize +2<CR>
+" inoremap <C-l> <Right>
+" inoremap <C-h> <Left>
+" inoremap <C-k> <Up>
+" inoremap <C-j> <Down>
