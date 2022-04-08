@@ -152,14 +152,15 @@ Plugin 'scrooloose/nerdcommenter'
 "彩虹括号
 " Plugin 'luochen1990/rainbow'
 
-" Plugin 'ojroques/nvim-lspfuzzy'
-" Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
-" Plugin 'junegunn/fzf.vim'
+Plugin 'ojroques/nvim-lspfuzzy'
+Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plugin 'junegunn/fzf.vim'
 
 Plugin 'ap/vim-css-color'
 
 Plugin 'nvim-lua/plenary.nvim'
 Plugin 'nvim-telescope/telescope.nvim'
+Plugin 'nvim-telescope/telescope-fzf-native.nvim' , { ' do ' : ' make ' }
 
 " 翻译
 Plugin 'voldikss/vim-translator'
@@ -355,15 +356,17 @@ require('telescope').setup{
         hide_on_startup = true
     }
     -- other defaults configuration here
-  } 
+  },
+  extensions = {
+  }
 }
 EOF
-nnoremap <leader>ff <cmd>Telescope find_files<cr>
+" nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fm <cmd>Telescope oldfiles<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>rg <cmd>Telescope grep_string<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
-nnoremap <leader>fo <cmd>Telescope lsp_document_symbols<cr>
+" nnoremap <leader>fo <cmd>Telescope lsp_document_symbols<cr>
 nnoremap <leader>fr <cmd>Telescope lsp_references<cr>
 nnoremap <leader>fd <cmd>Telescope lsp_definitions<cr>
 nnoremap <leader>fe <cmd>Telescope diagnostics bufnr=0<cr>
@@ -498,13 +501,13 @@ let g:NERDTreeFileExtensionHighlightFullName = 1
 " \ 'Gtags': 0
 " \}
 " let g:Lf_ShortcutF = "<leader>ff"
-" noremap <leader>ff :<C-U><C-R>=printf("Files")<CR><CR>
+noremap <leader>ff :<C-U><C-R>=printf("Files")<CR><CR>
 " noremap <leader>fm :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
 " noremap <leader>fm :<C-U><C-R>=printf("History")<CR><CR>
-" noremap <leader>fo :<C-U><C-R>=printf("BTags")<CR><CR>
+noremap <leader>fo :<C-U><C-R>=printf("BTags")<CR><CR>
 " noremap <leader>fo :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
 " noremap <leader>fl :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
-" noremap <leader>fl :<C-U><C-R>=printf("BLines")<CR><CR>
+noremap <leader>fl :<C-U><C-R>=printf("BLines")<CR><CR>
 " noremap <leader>fo :<C-U><C-R>=printf("LeaderfFunction")<CR><CR>
 
 " should use `Leaderf gtags --update` first
