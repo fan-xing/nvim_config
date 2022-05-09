@@ -161,7 +161,7 @@ set updatetime=500
 nmap <S-d> :Gvdiffsplit<CR>
 
 "airline
-let g:airline#extensions#tabline#enabled = 0 
+let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 " noremap <leader>3 :<C-U><C-R>=printf("tabprevious")<CR><CR>
 " noremap <leader>4 :<C-U><C-R>=printf("tabnext")<CR><CR>

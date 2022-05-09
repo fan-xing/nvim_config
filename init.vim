@@ -372,7 +372,7 @@ nmap <S-d> :Gvdiffsplit<CR>
 nmap <S-m> :G commit -am ""<LEFT>
 
 "airline
-let g:airline#extensions#tabline#enabled = 0 
+let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 " noremap <leader>3 :<C-U><C-R>=printf("tabprevious")<CR><CR>
 " noremap <leader>4 :<C-U><C-R>=printf("tabnext")<CR><CR>
@@ -390,7 +390,7 @@ set laststatus=3
 "let g:airline_theme='onedark'
 let g:airline_theme='transparent'
 "let g:airline_section_z = '%P-%l/%L-%c'
-"let g:airline_section_c = '[%n]%f'
+let g:airline_section_c = '%t'
 let g:airline#extensions#hunks#enabled= 1
 let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#ale#enabled = 1
@@ -556,6 +556,6 @@ nmap w- :vertical resize -2<CR>
 nmap w= :vertical resize +2<CR>
 noremap <C-j> :cn<CR>
 noremap <C-k> :cp<CR>
-noremap <S-q> :windo lcl|ccl<CR>
+noremap <S-q> :windo lcl\|ccl<CR>
 noremap <leader>cpf :let @+ = expand('%:p')<CR>
 noremap <leader>cpw :let @+ = expand('%').expand('::').expand('<cWORD>')<CR>
