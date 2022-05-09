@@ -156,6 +156,7 @@ colorscheme purify
 "git检查更新时间
 set updatetime=500
 nmap <S-d> :Gvdiffsplit<CR>
+nmap <S-m> :G commit -am ""<LEFT>
 
 "airline
 let g:airline#extensions#tabline#enabled = 1
