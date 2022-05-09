@@ -2,21 +2,9 @@
 let mapleader = " "
 "行号
 set nu
+"相对行号
 set relativenumber
 
-"主题也搞一下吧
-"let g:colorscheme_user_path = '~/.vim/bundle/vim-colorschemes/colors'
-"|'palenight' | 'ocean' | 'lighter' | 'darker' | 'default-community' | 'palenight-community' | 'ocean-community' | 'lighter-community' |'darker-community'
-" colorscheme gruvbox
-" colorscheme molokai
-" colorscheme seoul256
-" colorscheme onehalflight
-
-" let g:gruvbox_contrast_dark = "dark"
-" let g:gruvbox_contrast_light = "soft"
-set t_Co=256
-
-" Load the colorscheme
 " 不要使用vi的键盘模式，而是vim自己的
 set nocompatible
 
@@ -32,6 +20,7 @@ set clipboard=unnamedplus
 "不默认产生副本
 set nobackup
 
+" 二进制
 set binary
 
 "搜索高亮
@@ -43,11 +32,10 @@ set hlsearch
 " set foldmethod=marker
 
 "语法高亮
-syntax on 
-set redrawtime=20000
+syntax  on
 
 "自动对齐
-set autoindent
+autocmd BufReadPost * setlocal autoindent
 " 检测文件类型
 filetype on
 
@@ -90,9 +78,6 @@ set encoding=UTF-8
 set autoread
 
 set nocompatible              " 这是必需的 
-filetype off                  " 这是必需的 
-
-" set cscopeprg='~/.vim/bundle/vim-gutentags/autoload/gutentags/gtags_cscope.vim'
 
 " 在此设置运行时路径 
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -100,30 +85,28 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
-
-Plugin 'The-NERD-tree'
-Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
-map r :NERDTreeToggle<CR>
+Plugin 'preservim/nerdtree'
+" Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
+map <F2> :NERDTreeToggle<CR>
 "窗口大小
-let NERDTreeWinSize=40
+let NERDTreeWinSize=30
 
 "窗口位置
 let NERDTreeWinPos='left'
 
-Plugin 'neovim/nvim-lspconfig'
-" Plugin 'kabouzeid/nvim-lspinstall'
-Plugin 'williamboman/nvim-lsp-installer'
+Plugin 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
-" Plugin 'ycm-core/YouCompleteMe'
-" Plugin 'hrsh7th/nvim-compe'
+Plugin 'neovim/nvim-lspconfig'
+Plugin 'williamboman/nvim-lsp-installer'
 Plugin 'hrsh7th/cmp-nvim-lsp'
 Plugin 'hrsh7th/cmp-buffer'
 Plugin 'hrsh7th/cmp-path'
 Plugin 'hrsh7th/cmp-cmdline'
+Plugin 'hrsh7th/cmp-nvim-lsp-signature-help'
 Plugin 'hrsh7th/nvim-cmp'
 Plugin 'fatih/vim-go'
-
-Plugin 'kaicataldo/material.vim'
+Plugin 'simrat39/symbols-outline.nvim'
+Plugin 'buoto/gotests-vim'
 
 Plugin 'tpope/vim-fugitive'
 Plugin 'junegunn/gv.vim'
@@ -133,34 +116,21 @@ Plugin 'vim-airline/vim-airline'
 
 Plugin 'ryanoasis/vim-devicons'
 
-" Plugin 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
-
-" Plugin 'w0rp/ale'
-
 Plugin 'vim-airline/vim-airline-themes'
 
-"Plugin 'Chiel92/vim-autoformat'
+Plugin 'Chiel92/vim-autoformat'
 
-Plugin 'rodnaph/vim-color-schemes'
-
-" Plugin 'bkbncn/vim-colorschemes-picker'
-
-" Plugin 'overcache/NeoSolarized'
+Plugin 'Yggdroot/indentLine'
 
 Plugin 'scrooloose/nerdcommenter'
 
 "彩虹括号
 " Plugin 'luochen1990/rainbow'
 
-Plugin 'ojroques/nvim-lspfuzzy'
-Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plugin 'junegunn/fzf.vim'
-
 Plugin 'ap/vim-css-color'
 
 Plugin 'nvim-lua/plenary.nvim'
 Plugin 'nvim-telescope/telescope.nvim'
-Plugin 'nvim-telescope/telescope-fzf-native.nvim' , { ' do ' : ' make ' }
 
 " 翻译
 Plugin 'voldikss/vim-translator'
@@ -182,141 +152,126 @@ Plugin 'psliwka/vim-smoothie'
 call vundle#end()            " 这是必需的
 filetype plugin indent on    " 这是必需的
 
-"括号
-let g:rainbow_active = 1
+"rainbow 括号
+"let g:rainbow_active = 1
+
+"主题也搞一下吧
+set t_Co=256
 
 " onedark主题
-lua << EOF
--- require('onedark').setup {
---     style = 'darker',
---     colors = {
---         bright_orange = "#ff8800",    -- define a new color
---         green = '#00ffaa',            -- redefine an existing color
---         },
---     highlights = {
---         TSKeyword = {fg = '$green'},
---         TSString = {fg = '$bright_orange', bg = '#00ff00', fmt = 'bold'},
---         TSFunction = {fg = '#0000ff', sp = '$cyan', fmt = 'underline,italic'},
---         }
---     }
--- require('onedark').load()
-EOF
+"lua << EOF
+"-- require('onedark').setup {
+"--     style = 'darker',
+"--     colors = {
+"--         bright_orange = "#ff8800",    -- define a new color
+"--         green = '#00ffaa',            -- redefine an existing color
+"--         },
+"--     highlights = {
+"--         TSKeyword = {fg = '$green'},
+"--         TSString = {fg = '$bright_orange', bg = '#00ff00', fmt = 'bold'},
+"--         TSFunction = {fg = '#0000ff', sp = '$cyan', fmt = 'underline,italic'},
+"--         }
+"--     }
+"-- require('onedark').load()
+"EOF
 
 "catppuccin
-lua << EOF
-local catppuccin = require("catppuccin")
--- configure it
-catppuccin.setup{
-transparent_background = true,
-term_colors = false,
-styles = {
-    comments = "italic",
-    functions = "italic",
-    keywords = "italic",
-    strings = "NONE",
-    variables = "italic",
-},
-integrations = {
-    treesitter = true,
-    native_lsp = {
-        enabled = true,
-        virtual_text = {
-            errors = "italic",
-            hints = "italic",
-            warnings = "italic",
-            information = "italic",
-        },
-        underlines = {
-            errors = "underline",
-            hints = "underline",
-            warnings = "underline",
-            information = "underline",
-        },
-    },
-    lsp_trouble = false,
-    cmp = true,
-    lsp_saga = false,
-    gitgutter = false,
-    gitsigns = true,
-    telescope = true,
-    nvimtree = {
-        enabled = true,
-        show_root = false,
-        transparent_panel = false,
-    },
-    neotree = {
-        enabled = false,
-        show_root = false,
-        transparent_panel = false,
-    },
-    which_key = false,
-    indent_blankline = {
-        enabled = true,
-        colored_indent_levels = false,
-    },
-    dashboard = true,
-    neogit = false,
-    vim_sneak = false,
-    fern = false,
-    barbar = false,
-    bufferline = true,
-    markdown = true,
-    lightspeed = false,
-    ts_rainbow = false,
-    hop = false,
-    notify = true,
-    telekasten = true,
-    symbols_outline = true,
-}
-}
-EOF
-colorscheme catppuccin
+"lua << EOF
+"local catppuccin = require("catppuccin")
+"-- configure it
+"catppuccin.setup{
+"transparent_background = true,
+"term_colors = false,
+"styles = {
+"    comments = "italic",
+"    functions = "italic",
+"    keywords = "italic",
+"    strings = "italic",
+"    variables = "italic",
+"},
+"integrations = {
+"    treesitter = true,
+"    native_lsp = {
+"        enabled = true,
+"        virtual_text = {
+"            errors = "italic",
+"            hints = "italic",
+"            warnings = "italic",
+"            information = "italic",
+"        },
+"        underlines = {
+"            errors = "underline",
+"            hints = "underline",
+"            warnings = "underline",
+"            information = "underline",
+"        },
+"    },
+"    lsp_trouble = false,
+"    cmp = true,
+"    lsp_saga = false,
+"    gitgutter = false,
+"    gitsigns = true,
+"    telescope = true,
+"    nvimtree = {
+"        enabled = true,
+"        show_root = true,
+"        transparent_panel = false,
+"    },
+"    neotree = {
+"        enabled = false,
+"        show_root = false,
+"        transparent_panel = false,
+"    },
+"    which_key = false,
+"    indent_blankline = {
+"        enabled = true,
+"        colored_indent_levels = true,
+"    },
+"    dashboard = true,
+"    neogit = false,
+"    vim_sneak = false,
+"    fern = false,
+"    barbar = false,
+"    bufferline = true,
+"    markdown = true,
+"    lightspeed = false,
+"    ts_rainbow = false,
+"    hop = false,
+"    notify = true,
+"    telekasten = true,
+"    symbols_outline = true,
+"}
+"}
+"EOF
+"colorscheme catppuccin
 
 " github-nvim-theme
-" lua << EOF
-" require('github-theme').setup({
-"     transparent = true,
-"     theme_style = "dark_default",
-"     --theme_style = "dark",
-"     --theme_style = "dark_colorblind",
-"     --theme_style = "light",
-"     --theme_style = "light_default",
-"     --theme_style = "light_colorblind",
-"     --theme_style = "dimmed",
-"     -- other config
-"     sidebars = {"qf", "vista_kind", "terminal", "packer"},
-"     -- Change the "hint" color to the "orange" color, and make the "error" color bright red
-"     colors = {hint = "orange", error = "#ff0000"},
+lua << EOF
+require('github-theme').setup({
+    transparent = true,
+    --theme_style = "dark_default",
+    theme_style = "dark",
+    --theme_style = "dark_colorblind",
+    --theme_style = "light",
+    --theme_style = "light_default",
+    --theme_style = "light_colorblind",
+    --theme_style = "dimmed",
+    -- other config
+    sidebars = {"qf", "vista_kind", "terminal", "packer"},
+    -- Change the "hint" color to the "orange" color, and make the "error" color bright red
+    colors = {hint = "orange", error = "#ff0000"},
 
-"     -- Overwrite the highlight groups
-"     overrides = function(c)
-"     return {
-"         htmlTag = {fg = c.red, bg = "#282c34", sp = c.hint, style = "underline"},
-"         DiagnosticHint = {link = "LspDiagnosticsDefaultHint"},
-"         -- this will remove the highlight groups
-"         TSField = {},
-"         }
-" end
-" })
-" EOF
-
-"lspfuzzy
-" lua << EOF
-" --require('lspfuzzy').setup {
-" --    methods = 'all',         -- either 'all' or a list of LSP methods (see below)
-" --    jump_one = true,         -- jump immediately if there is only one location
-" --    fzf_preview = {          -- arguments to the FZF '--preview-window' option
-" --    'up:+{2}-/2'          -- preview on the right and centered on entry
-" --    },
-" --fzf_action = {           -- FZF actions
-" --['ctrl-t'] = 'tabedit',  -- go to location in a new tab
-" --['ctrl-v'] = 'vsplit',   -- go to location in a vertical split
-" --['ctrl-x'] = 'split',    -- go to location in a horizontal split
-" --},
-" --  fzf_modifier = ':~:.',   -- format FZF entries, see |filename-modifiers|
-" --  fzf_trim = true,         -- trim FZF entries
-" --  }
-" EOF
+    -- Overwrite the highlight groups
+    overrides = function(c)
+    return {
+        htmlTag = {fg = c.red, bg = "#282c34", sp = c.hint, style = "underline"},
+        DiagnosticHint = {link = "LspDiagnosticsDefaultHint"},
+        -- this will remove the highlight groups
+        TSField = {},
+        }
+    end
+})
+EOF
 
 " telescope
 lua << EOF
@@ -334,12 +289,16 @@ require('telescope').setup{
             ["<C-f>"] = "preview_scrolling_down",
             ["<C-j>"] = "move_selection_next",
             ["<C-k>"] = "move_selection_previous",
+            ["<Tab>"] = "move_selection_next",
+            ["<S-Tab>"] = "move_selection_previous",
             ["<C-q>"] = "close",
             ["<C-p>"] = action_layout.toggle_preview
         },
         n = {
             ["<C-q>"] = "close",
-            ["<C-p>"] = action_layout.toggle_preview
+            ["<C-p>"] = action_layout.toggle_preview,
+            ["<Tab>"] = "move_selection_next",
+            ["<S-Tab>"] = "move_selection_previous",
         }
     },
     layout_strategy = "horizontal",
@@ -361,45 +320,39 @@ require('telescope').setup{
   }
 }
 EOF
-" nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fm <cmd>Telescope oldfiles<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
-nnoremap <leader>rg <cmd>Telescope grep_string<cr>
+nnoremap <leader>rg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fg <cmd>Telescope grep_string<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
-" nnoremap <leader>fo <cmd>Telescope lsp_document_symbols<cr>
+nnoremap <leader>fo <cmd>Telescope lsp_document_symbols<cr>
 nnoremap <leader>fr <cmd>Telescope lsp_references<cr>
 nnoremap <leader>fd <cmd>Telescope lsp_definitions<cr>
+nnoremap <leader>fi <cmd>Telescope lsp_implementations<cr>
 nnoremap <leader>fe <cmd>Telescope diagnostics bufnr=0<cr>
-nnoremap <leader>fp <cmd>Telescope quickfix<cr>
+nnoremap <leader>fh <cmd>lua vim.lsp.buf.hover()<cr>
 
 " lsp
 " LSPINSTALLER START
 lua << EOF
 local lsp_installer = require("nvim-lsp-installer")
+
+-- Register a handler that will be called for each installed server when it's ready (i.e. when installation is finished
+-- or if the server is already installed).
 lsp_installer.on_server_ready(function(server)
-local opts = {}
-
--- (optional) Customize the options passed to the server
--- if server.name == "tsserver" then
---     opts.root_dir = function() ... end
--- end
-
--- This setup() function is exactly the same as lspconfig's setup function.
--- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-server:setup(opts)
+    local opts = { 
+    }
+    -- (optional) Customize the options passed to the server
+    -- if server.name == "psalm" then
+    --    opts = {
+    --    }
+    -- end
+    -- This setup() function will take the provided server configuration and decorate it with the necessary properties
+    -- before passing it onwards to lspconfig.
+    -- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+    server:setup(opts)
 end)
-local lsp_installer_servers = require'nvim-lsp-installer.servers'
-local server_available, requested_server = lsp_installer_servers.get_server("rust_analyzer")
-if server_available then
-    requested_server:on_ready(function ()
-    local opts = {}
-    requested_server:setup(opts)
-end)
-if not requested_server:is_installed() then
-    -- Queue the server to be installed
-    requested_server:install()
-end
-end
+
 lsp_installer.settings({
 ui = {
     icons = {
@@ -410,41 +363,23 @@ ui = {
     }
 })
 EOF
-
-" LSPINSTALLER END
-" LSPINSTALL START
-" lua << EOF
-" local function setup_servers()
-" require'lspinstall'.setup()
-" local servers = require'lspinstall'.installed_servers()
-" for _, server in pairs(servers) do
-" require'lspconfig'[server].setup{}
-" end
-" end
-" setup_servers()
-" -- Automatically reload after `:LspInstall <server>` so we don't have to restart neovim
-" require'lspinstall'.post_install_hook = function ()
-" setup_servers() -- reload installed servers
-" vim.cmd("bufdo e") -- this triggers the FileType autocmd that starts the server
-" end
-" EOF
-" LSPINSTALL END
-"补全
-" inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" LSPINSTALLER end
 
 "git检查更新时间
-set updatetime=100
-nmap <S-d> :Gdiffsplit<CR>
+set updatetime=500
+nmap <S-d> :Gvdiffsplit<CR>
+nmap <S-m> :G commit -am ""<LEFT>
 
-" tabline
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#whitespace#enabled = 0
+"airline
+let g:airline#extensions#tabline#enabled = 0 
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 noremap <C-h> :<C-U><C-R>=printf("bp")<CR><CR>
 noremap <C-l> :<C-U><C-R>=printf("bn")<CR><CR>
 " noremap <leader>3 :<C-U><C-R>=printf("tabprevious")<CR><CR>
 " noremap <leader>4 :<C-U><C-R>=printf("tabnext")<CR><CR>
+
+" symbools-outline
+map <F12> :SymbolsOutline<CR>
 
 "永远显示状态栏
 set laststatus=2
@@ -466,77 +401,23 @@ let airline#extensions#ale#warning_symbol = 'W:'
 let airline#extensions#ale#error_symbol = 'E:'
 let g:airline#extensions#fugitiveline#enabled = 1
 let g:airline#extensions#searchcount#enabled = 1 
+let g:airline#extensions#whitespace#enabled = 0 
 " 使用 powerline 外观
-" let g:airline_powerline_fonts = 1
+"let g:airline_powerline_fonts = 1
 
 "目录收藏默认打开
 let NERDTreeShowBookmarks=1
 " 删除文件时自动删除文件对应 buffer
 let NERDTreeAutoDeleteBuffer=1
-let g:NERDTreeFileExtensionHighlightFullName = 1
-
-" icons
-" let g:WebDevIconsNerdTreeGitPluginForceVAlign = 1
-
-" leaderf
-" let g:Lf_Ctags = '/usr/local/Cellar/universal-ctags/HEAD-b5cd9f4/bin/ctags'
-" " don't show the help in normal mode
-" let g:Lf_HideHelp = 1
-" let g:Lf_UseCache = 0
-" let g:Lf_UseVersionControlTool = 0 
-" let g:Lf_IgnoreCurrentBufferName = 0
-" " popup mode
-" let g:Lf_WindowPosition = 'popup'
-" let g:Lf_PreviewInPopup = 1
-" let g:Lf_PreviewResult = {
-" \ 'File': 0,
-" \ 'Buffer': 0,
-" \ 'Mru': 0,
-" \ 'Tag': 0,
-" \ 'BufTag': 1,
-" \ 'Function': 1,
-" \ 'Line': 1,
-" \ 'Colorscheme': 0,
-" \ 'Rg': 0,
-" \ 'Gtags': 0
-" \}
-" let g:Lf_ShortcutF = "<leader>ff"
-noremap <leader>ff :<C-U><C-R>=printf("Files")<CR><CR>
-" noremap <leader>fm :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
-" noremap <leader>fm :<C-U><C-R>=printf("History")<CR><CR>
-noremap <leader>fo :<C-U><C-R>=printf("BTags")<CR><CR>
-" noremap <leader>fo :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
-" noremap <leader>fl :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
-noremap <leader>fl :<C-U><C-R>=printf("BLines")<CR><CR>
-" noremap <leader>fo :<C-U><C-R>=printf("LeaderfFunction")<CR><CR>
-
-" should use `Leaderf gtags --update` first
-let g:Lf_GtagsAutoGenerate = 1
-let g:Lf_Gtagslabel = 'native-pygments'
-" nnoremap <silent><leader>fr <cmd>lua vim.lsp.buf.references()<CR>
-" nnoremap <silent><leader>fd <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent><leader>fk <cmd>lua vim.lsp.buf.hover()<CR>'
-" noremap <leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --result ctags-x", expand("<cword>"))<CR><CR>
-" noremap <leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --result ctags-x", expand("<cword>"))<CR><CR>
-"noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s --result ctags-x", "")<CR><CR>
-"noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s --result ctags-x ", "")<CR><CR>
-
-" noremap <C-D> :<C-U><C-R>=printf("Leaderf! rg -g '*.php' -g '*.go' -e %s", expand("<cword>"))<CR>
-" noremap <leader>fg :<C-U><C-R>=printf("Leaderf! rg ")<CR>
-" noremap <leader>rg :<C-U><C-R>=printf("Rg %s", expand("<cword>"))<CR>
-
-" neovim不支持这种弹框
-" set completeopt += popup
-set completeopt=menu,menuone,noselect
 
 " nvim-cmp
-  lua <<EOF
+lua <<EOF
     local cmp = require'cmp'
     -- Global setup.
     cmp.setup({
       snippet = {
         expand = function(args)
-          vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+          -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
           -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
           -- require'snippy'.expand_snippet(args.body) -- For `snippy` users.
           -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
@@ -547,9 +428,9 @@ set completeopt=menu,menuone,noselect
         ['<C-k>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 's' }),
         ['<tab>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 's' }),
         ['<S-tab>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 's' }),
-        ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+        ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
         ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
-        ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+        ['<C-g>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
         ['<C-e>'] = cmp.mapping({
           i = cmp.mapping.abort(),
           c = cmp.mapping.close(),
@@ -560,28 +441,31 @@ set completeopt=menu,menuone,noselect
       },
       sources = cmp.config.sources({
         { name = 'nvim_lsp' },
-        { name = 'vsnip' }, -- For vsnip users.
+        -- { name = 'vsnip' }, -- For vsnip users.
         -- { name = 'luasnip' }, -- For luasnip users.
         -- { name = 'snippy' }, -- For snippy users.
         -- { name = 'ultisnips' }, -- For ultisnips users.
-      }, {
-        { name = 'buffer' },
+        { name = 'path' },
+        { name = 'nvim_lsp_signature_help' },
       })
     })
     -- `/` cmdline setup.
     cmp.setup.cmdline('/', {
-      sources = {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = {
         { name = 'buffer' }
-      }
+      }    
     })
---    -- `:` cmdline setup.
---    cmp.setup.cmdline(':', {
---      sources = cmp.config.sources({
---        { name = 'path' }
---      }, {
---        { name = 'cmdline' }
---      })
---    })
+
+    -- `:` cmdline setup.
+    cmp.setup.cmdline(':', {
+        mapping = cmp.mapping.preset.cmdline(),
+      sources = cmp.config.sources({
+        { name = 'path' }
+      }, {
+        { name = 'cmdline' },
+      })
+    })
 EOF
 
 " 语法检查
@@ -590,13 +474,75 @@ let g:ale_sign_warning = '!'
 let g:ale_sign_column_always = 1
 let g:ale_set_highlights = 0
 
-" 注释的时候自动加个空格, 强迫症必配
-let g:NERDSpaceDelims=1
-let g:NERDDefaultAlign='left'
+"注释的时候自动加个空格, 强迫症必配
+"let g:NERDSpaceDelims=1
+"左对齐
+let g:NERDDefaultAlign = 'left'
+"删除注释尾部空格 
+let g:NERDTrimTrailingWhitespace = 1
 
-" 翻译
+"翻译
 let g:translator_default_engines = ['bing','google']
 let g:translator_proxy_url = 'socks5://127.0.0.1:1086'
+
+"indentLine
+let g:indentLine_char = '¦'
+"let g:indentLine_char_list = ['|','¦', '┆', '┊']
+"let g:indentLine_leadingSpaceEnabled = 1
+"let g:indentLine_leadingSpaceChar = '⋅'
+let g:markdown_syntax_conceal=0.8
+let g:vim_json_conceal=0
+set list lcs=tab:\|\ 
+
+"symbols_outline
+lua <<EOF
+vim.g.symbols_outline = {
+    auto_preview = false,
+    keymaps = {
+        close = {"<Esc>", "q"},
+        goto_location = "<Cr>",
+        focus_location = "G",
+        hover_symbol = "K",
+        toggle_preview  = "P",
+        rename_symbol = "R",
+        code_actions = "L",
+    }
+}
+EOF
+
+"treesitter
+lua  <<EOF
+require'nvim-treesitter.configs'.setup {
+  -- A list of parser names, or "all"
+  ensure_installed = {all},
+
+  -- Install parsers synchronously (only applied to `ensure_installed`)
+  sync_install = false,
+
+  -- List of parsers to ignore installing (for "all")
+  ignore_install = {},
+
+  highlight = {
+    -- `false` will disable the whole extension
+    enable = true,
+
+    -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
+    -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
+    -- the name of the parser)
+    -- list of language that will be disabled
+    disable = {},
+
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
+  },
+  indent = {
+    enable = true
+  }
+}
+EOF
 
 " 自定义快捷键
 noremap <leader>fw :<C-U><C-R>=printf("/%s\\C", expand("<cword>"))<CR><CR>
@@ -608,7 +554,8 @@ nmap w] :resize +2<CR>
 nmap w[ :resize -2<CR>
 nmap w- :vertical resize -2<CR>
 nmap w= :vertical resize +2<CR>
-" inoremap <C-l> <Right>
-" inoremap <C-h> <Left>
-" inoremap <C-k> <Up>
-" inoremap <C-j> <Down>
+noremap <C-j> :cn<CR>
+noremap <C-k> :cp<CR>
+noremap <S-q> :ccl<CR>
+noremap <leader>cpf :let @+ = expand('%:p')<CR>
+noremap <leader>cpw :let @+ = expand('%').expand('::').expand('<cWORD>')<CR>
