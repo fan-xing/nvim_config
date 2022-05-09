@@ -138,9 +138,6 @@ Plugin 'junegunn/seoul256.vim'
 Plugin 'sonph/onehalf', { 'rtp': 'vim' }
 Plugin 'kyoz/purify', { 'rtp': 'vim' }
 
-"高亮优化
-Plugin 'sheerun/vim-polyglot'
-
 call vundle#end()            " 这是必需的
 filetype plugin indent on    " 这是必需的
 
@@ -187,7 +184,7 @@ let g:airline#extensions#fugitiveline#enabled = 1
 let g:airline#extensions#searchcount#enabled = 1 
 let g:airline#extensions#whitespace#enabled = 0 
 "使用 powerline 外观
-"let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 1
 
 "目录收藏默认打开
 let NERDTreeShowBookmarks=1
