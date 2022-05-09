@@ -163,8 +163,6 @@ nmap <S-d> :Gvdiffsplit<CR>
 "airline
 let g:airline#extensions#tabline#enabled = 0 
 let g:airline#extensions#tabline#formatter = 'unique_tail'
-noremap <C-h> :<C-U><C-R>=printf("bp")<CR><CR>
-noremap <C-l> :<C-U><C-R>=printf("bn")<CR><CR>
 " noremap <leader>3 :<C-U><C-R>=printf("tabprevious")<CR><CR>
 " noremap <leader>4 :<C-U><C-R>=printf("tabnext")<CR><CR>
 "永远显示状态栏
@@ -177,9 +175,9 @@ let g:airline_theme='purify'
 "let g:airline_theme='onedark'
 "let g:airline_theme='gruvbox'
 "let g:airline_theme='transparent'
-"let g:airline_section_z = "%P:%l/%L-%c"
-"let g:airline_section_c = "%t"
-let g:airline#extensions#hunks#enabled= 0
+"let g:airline_section_z = '%P-%l/%L-%c'
+let g:airline_section_c = '%t'
+let g:airline#extensions#hunks#enabled= 1
 let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#ale#enabled = 1
 let g:airline_skip_empty_sections = 1
@@ -187,7 +185,7 @@ let airline#extensions#ale#warning_symbol = 'W:'
 let airline#extensions#ale#error_symbol = 'E:'
 let g:airline#extensions#fugitiveline#enabled = 1
 let g:airline#extensions#searchcount#enabled = 1 
-let g:airline#extensions#whitespace#enabled = 0
+let g:airline#extensions#whitespace#enabled = 0 
 "使用 powerline 外观
 "let g:airline_powerline_fonts = 1
 
@@ -265,12 +263,14 @@ noremap <leader>nh :<C-U><C-R>=printf("noh")<CR><CR>
 noremap <C-s> :<C-U><C-R>=printf("w")<CR><CR>
 noremap <C-q> :<C-U><C-R>=printf("q")<CR><CR>
 noremap <C-x> :<C-U><C-R>=printf("bd")<CR><CR>
+noremap <C-h> :<C-U><C-R>=printf("bp")<CR><CR>
+noremap <C-l> :<C-U><C-R>=printf("bn")<CR><CR>
 nmap w] :resize +2<CR>
 nmap w[ :resize -2<CR>
 nmap w- :vertical resize -2<CR>
 nmap w= :vertical resize +2<CR>
 noremap <C-j> :cn<CR>
 noremap <C-k> :cp<CR>
-noremap <S-q> :ccl<CR>
+noremap <S-q> :windo lcl\|ccl<CR>
 noremap <leader>cpf :let @+ = expand('%:p')<CR>
 noremap <leader>cpw :let @+ = expand('%').expand('::').expand('<cWORD>')<CR>
