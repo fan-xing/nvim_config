@@ -160,9 +160,7 @@ filetype plugin indent on    " 这是必需的
 "let g:rainbow_active = 1
 
 "主题也搞一下吧
-autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE " transparent bg
 set t_Co=256
-
 colorscheme dracula
 
 " onedark主题
@@ -560,3 +558,4 @@ noremap <C-k> :cp<CR>
 noremap <S-q> :windo lcl\|ccl<CR>
 noremap <leader>cpf :let @+ = expand('%:p')<CR>
 noremap <leader>cpw :let @+ = expand('%').expand('::').expand('<cWORD>')<CR>
+autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE " transparent bg
