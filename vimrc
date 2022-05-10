@@ -137,6 +137,10 @@ Plugin 'ayu-theme/ayu-vim'
 Plugin 'junegunn/seoul256.vim'
 Plugin 'sonph/onehalf', { 'rtp': 'vim' }
 Plugin 'kyoz/purify', { 'rtp': 'vim' }
+Plugin 'dracula/vim', { 'name': 'dracula' }
+
+"平滑移动
+Plugin 'psliwka/vim-smoothie'
 
 call vundle#end()            " 这是必需的
 filetype plugin indent on    " 这是必需的
@@ -147,8 +151,9 @@ filetype plugin indent on    " 这是必需的
 "let g:gruvbox_contrast_dark = "dark"
 " let g:gruvbox_contrast_light = "soft"
 set t_Co=256
-autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE " transparent bg
-colorscheme purify
+"colorscheme purify
+"dracula
+colorscheme dracula
 
 "rainbow 括号
 "let g:rainbow_active = 1
@@ -161,13 +166,12 @@ nmap <S-m> :G commit -am ""<LEFT>
 "airline
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
-" noremap <leader>3 :<C-U><C-R>=printf("tabprevious")<CR><CR>
-" noremap <leader>4 :<C-U><C-R>=printf("tabnext")<CR><CR>
 "永远显示状态栏
 set laststatus=2
 "let g:airline_theme='jellybeans'
 "let g:airline_theme='wombat'
 let g:airline_theme='purify'
+"let g:airline_theme='dracula'
 "let g:airline_theme='molokai'
 "let g:airline_theme='base16'
 "let g:airline_theme='onedark'
@@ -176,7 +180,6 @@ let g:airline_theme='purify'
 "let g:airline_section_z = '%P-%l/%L-%c'
 let g:airline_section_c = '%t'
 let g:airline#extensions#hunks#enabled= 1
-let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#ale#enabled = 1
 let g:airline_skip_empty_sections = 1
 let airline#extensions#ale#warning_symbol = 'W:'
@@ -272,3 +275,4 @@ noremap <C-k> :cp<CR>
 noremap <S-q> :windo lcl\|ccl<CR>
 noremap <leader>cpf :let @+ = expand('%:p')<CR>
 noremap <leader>cpw :let @+ = expand('%').expand('::').expand('<cWORD>')<CR>
+autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE " transparent bg

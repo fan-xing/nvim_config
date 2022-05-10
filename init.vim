@@ -145,18 +145,25 @@ Plugin 'sonph/onehalf', { 'rtp': 'vim' }
 Plugin 'navarasu/onedark.nvim'
 Plugin 'catppuccin/nvim', {'name': 'catppuccin'}
 Plugin 'marko-cerovac/material.nvim'
+Plugin 'kyoz/purify', { 'rtp': 'vim' }
+Plugin 'dracula/vim', { 'name': 'dracula' }
 
-" 平滑移动
+"平滑移动
 Plugin 'psliwka/vim-smoothie'
 
 call vundle#end()            " 这是必需的
 filetype plugin indent on    " 这是必需的
 
+"todo
+
 "rainbow 括号
 "let g:rainbow_active = 1
 
 "主题也搞一下吧
+autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE " transparent bg
 set t_Co=256
+
+colorscheme dracula
 
 " onedark主题
 "lua << EOF
@@ -246,32 +253,32 @@ set t_Co=256
 "colorscheme catppuccin
 
 " github-nvim-theme
-lua << EOF
-require('github-theme').setup({
-    transparent = true,
-    --theme_style = "dark_default",
-    theme_style = "dark",
-    --theme_style = "dark_colorblind",
-    --theme_style = "light",
-    --theme_style = "light_default",
-    --theme_style = "light_colorblind",
-    --theme_style = "dimmed",
-    -- other config
-    sidebars = {"qf", "vista_kind", "terminal", "packer"},
-    -- Change the "hint" color to the "orange" color, and make the "error" color bright red
-    colors = {hint = "orange", error = "#ff0000"},
+"lua << EOF
+"require('github-theme').setup({
+"    transparent = true,
+"    --theme_style = "dark_default",
+"    theme_style = "dark",
+"    --theme_style = "dark_colorblind",
+"    --theme_style = "light",
+"    --theme_style = "light_default",
+"    --theme_style = "light_colorblind",
+"    --theme_style = "dimmed",
+"    -- other config
+"    sidebars = {"qf", "vista_kind", "terminal", "packer"},
+"    -- Change the "hint" color to the "orange" color, and make the "error" color bright red
+"    colors = {hint = "orange", error = "#ff0000"},
 
-    -- Overwrite the highlight groups
-    overrides = function(c)
-    return {
-        htmlTag = {fg = c.red, bg = "#282c34", sp = c.hint, style = "underline"},
-        DiagnosticHint = {link = "LspDiagnosticsDefaultHint"},
-        -- this will remove the highlight groups
-        TSField = {},
-        }
-    end
-})
-EOF
+"    -- Overwrite the highlight groups
+"    overrides = function(c)
+"    return {
+"        htmlTag = {fg = c.red, bg = "#282c34", sp = c.hint, style = "underline"},
+"        DiagnosticHint = {link = "LspDiagnosticsDefaultHint"},
+"        -- this will remove the highlight groups
+"        TSField = {},
+"        }
+"    end
+"})
+"EOF
 
 " telescope
 lua << EOF
@@ -335,24 +342,8 @@ nnoremap <leader>fh <cmd>lua vim.lsp.buf.hover()<cr>
 " lsp
 " LSPINSTALLER START
 lua << EOF
+require("nvim-lsp-installer").setup {}
 local lsp_installer = require("nvim-lsp-installer")
-
--- Register a handler that will be called for each installed server when it's ready (i.e. when installation is finished
--- or if the server is already installed).
-lsp_installer.on_server_ready(function(server)
-    local opts = { 
-    }
-    -- (optional) Customize the options passed to the server
-    -- if server.name == "psalm" then
-    --    opts = {
-    --    }
-    -- end
-    -- This setup() function will take the provided server configuration and decorate it with the necessary properties
-    -- before passing it onwards to lspconfig.
-    -- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-    server:setup(opts)
-end)
-
 lsp_installer.settings({
 ui = {
     icons = {
@@ -363,6 +354,18 @@ ui = {
     }
 })
 
+local servers = { 'bashls', 'clangd', 'bashls', 'gopls', 'html', 'intelephense', 'vimls'}
+for _, lsp in pairs(servers) do
+  require('lspconfig')[lsp].setup {
+    on_attach = on_attach,
+    flags = {
+      -- This will be the default in neovim 0.7+
+      debounce_text_changes = 150,
+    }
+  }
+end
+
+
 EOF
 " LSPINSTALLER end
 
@@ -371,15 +374,12 @@ set updatetime=500
 nmap <S-d> :Gvdiffsplit<CR>
 nmap <S-m> :G commit -am ""<LEFT>
 
-"airline
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail'
-" noremap <leader>3 :<C-U><C-R>=printf("tabprevious")<CR><CR>
-" noremap <leader>4 :<C-U><C-R>=printf("tabnext")<CR><CR>
-
 " symbools-outline
 map <F12> :SymbolsOutline<CR>
 
+"airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
 "永远显示状态栏
 set laststatus=3
 "let g:airline_theme='jellybeans'
@@ -388,7 +388,8 @@ set laststatus=3
 "let g:airline_theme='molokai'
 "let g:airline_theme='base16'
 "let g:airline_theme='onedark'
-let g:airline_theme='transparent'
+"let g:airline_theme='transparent'
+let g:airline_theme='purify'
 "let g:airline_section_z = '%P-%l/%L-%c'
 let g:airline_section_c = '%t'
 let g:airline#extensions#hunks#enabled= 1
@@ -401,7 +402,7 @@ let g:airline#extensions#fugitiveline#enabled = 1
 let g:airline#extensions#searchcount#enabled = 1 
 let g:airline#extensions#whitespace#enabled = 0 
 " 使用 powerline 外观
-"let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 1
 
 "目录收藏默认打开
 let NERDTreeShowBookmarks=1
@@ -415,7 +416,7 @@ lua <<EOF
     cmp.setup({
       snippet = {
         expand = function(args)
-          -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+         -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
           -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
           -- require'snippy'.expand_snippet(args.body) -- For `snippy` users.
           -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
