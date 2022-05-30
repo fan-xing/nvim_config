@@ -9,7 +9,7 @@ set relativenumber
 set nocompatible
 
 "鼠标
-" set mouse+=a
+set mouse+=a
 
 " y复制到mac里
 " set clipboard=unnamed
@@ -26,6 +26,8 @@ set binary
 "搜索高亮
 set hlsearch
 
+set termguicolors
+
 " 禁止折行
 "set nowrap
 " 折叠
@@ -33,6 +35,7 @@ set hlsearch
 
 "语法高亮
 syntax  on
+set redrawtime=10000
 
 "自动对齐
 autocmd BufReadPost * setlocal autoindent
@@ -105,18 +108,18 @@ Plugin 'hrsh7th/cmp-cmdline'
 Plugin 'hrsh7th/cmp-nvim-lsp-signature-help'
 Plugin 'hrsh7th/nvim-cmp'
 Plugin 'fatih/vim-go'
-Plugin 'simrat39/symbols-outline.nvim'
 Plugin 'buoto/gotests-vim'
+Plugin 'preservim/tagbar'
 
 Plugin 'tpope/vim-fugitive'
 Plugin 'junegunn/gv.vim'
 Plugin 'airblade/vim-gitgutter'
 
-Plugin 'vim-airline/vim-airline'
+Plugin 'nvim-lualine/lualine.nvim'
+Plugin 'romgrk/barbar.nvim'
+Plugin 'kyazdani42/nvim-web-devicons'
 
 Plugin 'ryanoasis/vim-devicons'
-
-Plugin 'vim-airline/vim-airline-themes'
 
 Plugin 'Chiel92/vim-autoformat'
 
@@ -125,7 +128,7 @@ Plugin 'Yggdroot/indentLine'
 Plugin 'scrooloose/nerdcommenter'
 
 "彩虹括号
-" Plugin 'luochen1990/rainbow'
+Plugin 'p00f/nvim-ts-rainbow'
 
 Plugin 'ap/vim-css-color'
 
@@ -156,12 +159,9 @@ filetype plugin indent on    " 这是必需的
 
 "todo
 
-"rainbow 括号
-"let g:rainbow_active = 1
-
 "主题也搞一下吧
 set t_Co=256
-colorscheme dracula
+" colorscheme dracula
 
 " onedark主题
 "lua << EOF
@@ -181,74 +181,74 @@ colorscheme dracula
 "EOF
 
 "catppuccin
-"lua << EOF
-"local catppuccin = require("catppuccin")
-"-- configure it
-"catppuccin.setup{
-"transparent_background = true,
-"term_colors = false,
-"styles = {
-"    comments = "italic",
-"    functions = "italic",
-"    keywords = "italic",
-"    strings = "italic",
-"    variables = "italic",
-"},
-"integrations = {
-"    treesitter = true,
-"    native_lsp = {
-"        enabled = true,
-"        virtual_text = {
-"            errors = "italic",
-"            hints = "italic",
-"            warnings = "italic",
-"            information = "italic",
-"        },
-"        underlines = {
-"            errors = "underline",
-"            hints = "underline",
-"            warnings = "underline",
-"            information = "underline",
-"        },
-"    },
-"    lsp_trouble = false,
-"    cmp = true,
-"    lsp_saga = false,
-"    gitgutter = false,
-"    gitsigns = true,
-"    telescope = true,
-"    nvimtree = {
-"        enabled = true,
-"        show_root = true,
-"        transparent_panel = false,
-"    },
-"    neotree = {
-"        enabled = false,
-"        show_root = false,
-"        transparent_panel = false,
-"    },
-"    which_key = false,
-"    indent_blankline = {
-"        enabled = true,
-"        colored_indent_levels = true,
-"    },
-"    dashboard = true,
-"    neogit = false,
-"    vim_sneak = false,
-"    fern = false,
-"    barbar = false,
-"    bufferline = true,
-"    markdown = true,
-"    lightspeed = false,
-"    ts_rainbow = false,
-"    hop = false,
-"    notify = true,
-"    telekasten = true,
-"    symbols_outline = true,
-"}
-"}
-"EOF
-"colorscheme catppuccin
+lua << EOF
+local catppuccin = require("catppuccin")
+-- configure it
+catppuccin.setup{
+transparent_background = true,
+term_colors = false,
+styles = {
+   comments = "italic",
+   functions = "italic",
+   keywords = "italic",
+   strings = "italic",
+   variables = "italic",
+},
+integrations = {
+   treesitter = true,
+   native_lsp = {
+       enabled = true,
+       virtual_text = {
+           errors = "italic",
+           hints = "italic",
+           warnings = "italic",
+           information = "italic",
+       },
+       underlines = {
+           errors = "underline",
+           hints = "underline",
+           warnings = "underline",
+           information = "underline",
+       },
+   },
+   lsp_trouble = false,
+   cmp = true,
+   lsp_saga = false,
+   gitgutter = true,
+   gitsigns = true,
+   telescope = true,
+   nvimtree = {
+       enabled = true,
+       show_root = true,
+       transparent_panel = false,
+   },
+   neotree = {
+       enabled = false,
+       show_root = false,
+       transparent_panel = false,
+   },
+   which_key = false,
+   indent_blankline = {
+       enabled = true,
+       colored_indent_levels = true,
+   },
+   dashboard = true,
+   neogit = false,
+   vim_sneak = false,
+   fern = false,
+   barbar = false,
+   bufferline = true,
+   markdown = true,
+   lightspeed = false,
+   ts_rainbow = true,
+   hop = false,
+   notify = true,
+   telekasten = true,
+   symbols_outline = false,
+}
+}
+EOF
+colorscheme catppuccin
 
 " github-nvim-theme
 "lua << EOF
@@ -277,6 +277,9 @@ colorscheme dracula
 "    end
 "})
 "EOF
+
+"tagbar
+map <F12> :Tagbar<CR>
 
 " telescope
 lua << EOF
@@ -370,37 +373,225 @@ EOF
 "git检查更新时间
 set updatetime=500
 nmap <S-d> :Gvdiffsplit<CR>
-nmap <S-m> :G commit -am ""<LEFT>
 
-" symbools-outline
-map <F12> :SymbolsOutline<CR>
-
-"airline
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail'
 "永远显示状态栏
 set laststatus=3
-"let g:airline_theme='jellybeans'
-"let g:airline_theme='wombat'
-"let g:airline_theme='xtermlight'
-"let g:airline_theme='molokai'
-"let g:airline_theme='base16'
-"let g:airline_theme='onedark'
-"let g:airline_theme='transparent'
-let g:airline_theme='purify'
-"let g:airline_section_z = '%P-%l/%L-%c'
-let g:airline_section_c = '%t'
-let g:airline#extensions#hunks#enabled= 1
-let g:airline#extensions#branch#enabled = 1
-let g:airline#extensions#ale#enabled = 1
-let g:airline_skip_empty_sections = 1
-let airline#extensions#ale#warning_symbol = 'W:'
-let airline#extensions#ale#error_symbol = 'E:'
-let g:airline#extensions#fugitiveline#enabled = 1
-let g:airline#extensions#searchcount#enabled = 1 
-let g:airline#extensions#whitespace#enabled = 0 
-" 使用 powerline 外观
-let g:airline_powerline_fonts = 1
+lua << EOF
+-- Eviline config for lualine
+-- Author: shadmansaleh
+-- Credit: glepnir
+local lualine = require('lualine')
+
+-- Color table for highlights
+-- stylua: ignore
+local colors = {
+  bg       = '#202328',
+  fg       = '#bbc2cf',
+  yellow   = '#ECBE7B',
+  cyan     = '#008080',
+  darkblue = '#081633',
+  green    = '#98be65',
+  orange   = '#FF8800',
+  violet   = '#a9a1e1',
+  magenta  = '#c678dd',
+  blue     = '#51afef',
+  red      = '#ec5f67',
+}
+
+local conditions = {
+  buffer_not_empty = function()
+    return vim.fn.empty(vim.fn.expand('%:t')) ~= 1
+  end,
+  hide_in_width = function()
+    return vim.fn.winwidth(0) > 80
+  end,
+  check_git_workspace = function()
+    local filepath = vim.fn.expand('%:p:h')
+    local gitdir = vim.fn.finddir('.git', filepath .. ';')
+    return gitdir and #gitdir > 0 and #gitdir < #filepath
+  end,
+}
+
+-- Config
+local config = {
+  options = {
+    -- Disable sections and component separators
+    component_separators = '',
+    section_separators = '',
+    theme = {
+      -- We are going to use lualine_c an lualine_x as left and
+      -- right section. Both are highlighted by c theme .  So we
+      -- are just setting default looks o statusline
+      normal = { c = { fg = colors.fg, bg = "NONE" } },
+      inactive = { c = { fg = colors.fg, bg = "NONE" } },
+    },
+  },
+  sections = {
+    -- these are to remove the defaults
+    lualine_a = {},
+    lualine_b = {},
+    lualine_y = {},
+    lualine_z = {},
+    -- These will be filled later
+    lualine_c = {},
+    lualine_x = {},
+  },
+  inactive_sections = {
+    -- these are to remove the defaults
+    lualine_a = {},
+    lualine_b = {},
+    lualine_y = {},
+    lualine_z = {},
+    lualine_c = {},
+    lualine_x = {},
+  },
+}
+
+-- Inserts a component in lualine_c at left section
+local function ins_left(component)
+  table.insert(config.sections.lualine_c, component)
+end
+
+-- Inserts a component in lualine_x ot right section
+local function ins_right(component)
+  table.insert(config.sections.lualine_x, component)
+end
+
+ins_left {
+  -- mode component
+  function()
+    return ''
+  end,
+  color = function()
+    -- auto change color according to neovims mode
+    local mode_color = {
+      n = colors.red,
+      i = colors.green,
+      v = colors.blue,
+      [''] = colors.blue,
+      V = colors.blue,
+      c = colors.magenta,
+      no = colors.red,
+      s = colors.orange,
+      S = colors.orange,
+      [''] = colors.orange,
+      ic = colors.yellow,
+      R = colors.violet,
+      Rv = colors.violet,
+      cv = colors.red,
+      ce = colors.red,
+      r = colors.cyan,
+      rm = colors.cyan,
+      ['r?'] = colors.cyan,
+      ['!'] = colors.red,
+      t = colors.red,
+    }
+    return { fg = mode_color[vim.fn.mode()] }
+  end,
+  padding = { right = 1 },
+}
+
+ins_left {
+  -- filesize component
+  'filesize',
+  cond = conditions.buffer_not_empty,
+}
+
+ins_left { 'location' }
+
+-- Insert mid section. You can make any number of sections in neovim :)
+-- for lualine it's any number greater then 2
+ins_left {
+  'filename',
+  cond = conditions.buffer_not_empty,
+  color = { fg = colors.magenta, gui = 'bold' },
+  path  = 1,
+}
+
+ins_left {
+  -- Lsp server name .
+  function()
+    local msg = 'No Active Lsp'
+    local buf_ft = vim.api.nvim_buf_get_option(0, 'filetype')
+    local clients = vim.lsp.get_active_clients()
+    if next(clients) == nil then
+      return msg
+    end
+    for _, client in ipairs(clients) do
+      local filetypes = client.config.filetypes
+      if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
+        return client.name
+      end
+    end
+    return msg
+  end,
+  icon = ' LSP:',
+  color = { fg = '#ffffff', gui = 'bold' },
+}
+
+ins_left {
+  'diagnostics',
+  sources = { 'nvim_diagnostic' },
+  symbols = { error = ' ', warn = ' ', info = ' ' },
+  diagnostics_color = {
+    color_error = { fg = colors.red },
+    color_warn = { fg = colors.yellow },
+    color_info = { fg = colors.cyan },
+  },
+}
+
+ins_left {
+  function()
+    return '%='
+  end,
+}
+
+-- Add components to right sections
+ins_right {
+  'o:encoding', -- option component same as &encoding in viml
+  fmt = string.upper, -- I'm not sure why it's upper case either ;)
+  cond = conditions.hide_in_width,
+  color = { fg = colors.green, gui = 'bold' },
+}
+
+ins_right {
+  'fileformat',
+  fmt = string.upper,
+  icons_enabled = false, -- I think icons are cool but Eviline doesn't have them. sigh
+  color = { fg = colors.green, gui = 'bold' },
+}
+
+ins_right {
+  'branch',
+  icon = '',
+  color = { fg = colors.violet, gui = 'bold' },
+}
+
+ins_right {
+  'diff',
+  -- Is it me or the symbol for modified us really weird
+  symbols = { added = ' ', modified = '柳 ', removed = ' ' },
+  diff_color = {
+    added = { fg = colors.green },
+    modified = { fg = colors.orange },
+    removed = { fg = colors.red },
+  },
+  cond = conditions.hide_in_width,
+}
+
+-- Now don't forget to initialize lualine
+lualine.setup(config)
+EOF
+" barbar 
+" NOTE: If barbar's option dict isn't created yet, create it
+let bufferline = get(g:, 'bufferline', {})
+let bufferline.add_in_buffer_number_order = v:true
+" If true, new buffers will be inserted at the start/end of the list.
+" Default is to insert after current buffer.
+let bufferline.insert_at_start = v:false
+let bufferline.insert_at_end = v:true
+lua << EOF
+EOF
 
 "目录收藏默认打开
 let NERDTreeShowBookmarks=1
@@ -471,8 +662,8 @@ let g:ale_sign_warning = '!'
 let g:ale_sign_column_always = 1
 let g:ale_set_highlights = 0
 
-"注释的时候自动加个空格, 强迫症必配
-"let g:NERDSpaceDelims=1
+"注释的时候自动加个空格
+let g:NERDSpaceDelims=1
 "左对齐
 let g:NERDDefaultAlign = 'left'
 "删除注释尾部空格 
@@ -490,22 +681,6 @@ let g:indentLine_char = '¦'
 let g:markdown_syntax_conceal=0.8
 let g:vim_json_conceal=0
 set list lcs=tab:\|\ 
-
-"symbols_outline
-lua <<EOF
-vim.g.symbols_outline = {
-    auto_preview = false,
-    keymaps = {
-        close = {"<Esc>", "q"},
-        goto_location = "<Cr>",
-        focus_location = "G",
-        hover_symbol = "K",
-        toggle_preview  = "P",
-        rename_symbol = "R",
-        code_actions = "L",
-    }
-}
-EOF
 
 "treesitter
 lua  <<EOF
@@ -537,6 +712,14 @@ require'nvim-treesitter.configs'.setup {
   },
   indent = {
     enable = true
+  },
+  rainbow = {
+    enable = true,
+    -- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
+    extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+    max_file_lines = nil, -- Do not enable for files with more than n lines, int
+    -- colors = {}, -- table of hex strings
+    -- termcolors = {} -- table of colour name strings
   }
 }
 EOF
@@ -553,9 +736,9 @@ nmap w] :resize +2<CR>
 nmap w[ :resize -2<CR>
 nmap w- :vertical resize -2<CR>
 nmap w= :vertical resize +2<CR>
-noremap <C-j> :cn<CR>
-noremap <C-k> :cp<CR>
-noremap <S-q> :windo lcl\|ccl<CR>
+noremap <expr> <C-k> empty(filter(getwininfo(), 'v:val.loclist')) ? ':cp<CR>' : ':lprev<CR>'
+noremap <expr> <C-j> empty(filter(getwininfo(), 'v:val.loclist')) ? ':cn<CR>' : ':lnext<CR>'
+noremap <expr> <S-q> empty(filter(getwininfo(), 'v:val.loclist')) ? ':cclose<CR>' : ':lclose<CR>'
 noremap <leader>cpf :let @+ = expand('%:p')<CR>
 noremap <leader>cpw :let @+ = expand('%').expand('::').expand('<cWORD>')<CR>
 autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE " transparent bg

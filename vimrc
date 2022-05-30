@@ -9,7 +9,7 @@ set relativenumber
 set nocompatible
 
 "鼠标
-"set mouse+=a
+set mouse+=a
 
 " y复制到mac里
 set clipboard=unnamed
@@ -31,6 +31,7 @@ set hlsearch
 
 "语法高亮
 syntax on
+set redrawtime=10000
 
 "自动对齐
 autocmd BufReadPost * setlocal autoindent
@@ -87,7 +88,7 @@ call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
 
-Plugin 'The-NERD-tree'
+Plugin 'preservim/nerdtree'
 map <F2> :NERDTreeToggle<CR>
 "窗口大小
 let NERDTreeWinSize=35
@@ -101,6 +102,7 @@ Plugin 'prabirshrestha/asyncomplete.vim'
 Plugin 'prabirshrestha/asyncomplete-lsp.vim'
 Plugin 'fatih/vim-go'
 Plugin 'buoto/gotests-vim'
+Plugin 'preservim/tagbar'
 
 Plugin 'tpope/vim-fugitive'
 Plugin 'junegunn/gv.vim'
@@ -161,7 +163,6 @@ colorscheme dracula
 "git检查更新时间
 set updatetime=500
 nmap <S-d> :Gvdiffsplit<CR>
-nmap <S-m> :G commit -am ""<LEFT>
 
 "airline
 let g:airline#extensions#tabline#enabled = 1
@@ -177,18 +178,16 @@ let g:airline_theme='purify'
 "let g:airline_theme='onedark'
 "let g:airline_theme='gruvbox'
 "let g:airline_theme='transparent'
-"let g:airline_section_z = '%P-%l/%L-%c'
-let g:airline_section_c = '%t'
-let g:airline#extensions#hunks#enabled= 1
-let g:airline#extensions#ale#enabled = 1
 let g:airline_skip_empty_sections = 1
-let airline#extensions#ale#warning_symbol = 'W:'
-let airline#extensions#ale#error_symbol = 'E:'
-let g:airline#extensions#fugitiveline#enabled = 1
-let g:airline#extensions#searchcount#enabled = 1 
 let g:airline#extensions#whitespace#enabled = 0 
+let g:airline#extensions#tagbar#enabled = 1
 "使用 powerline 外观
 let g:airline_powerline_fonts = 1
+let g:airline_left_sep = "\uE0B4"
+let g:airline_right_sep = ""
+let g:airline_left_alt_sep = ""
+let g:airline_right_alt_sep = ""
+
 
 "目录收藏默认打开
 let NERDTreeShowBookmarks=1
@@ -208,8 +207,8 @@ let g:ale_sign_warning = '!'
 let g:ale_sign_column_always = 1
 let g:ale_set_highlights = 0
 
-" 注释的时候自动加个空格, 强迫症必配
-"let g:NERDSpaceDelims=1
+" 注释的时候自动加个空格,
+let g:NERDSpaceDelims=1
 "删除注释尾部空格 
 let g:NERDTrimTrailingWhitespace = 1
 
@@ -217,8 +216,10 @@ let g:NERDTrimTrailingWhitespace = 1
 let g:translator_default_engines = ['bing','google']
 let g:translator_proxy_url = 'socks5://127.0.0.1:1086'
 
+"tagbar
+map <F12> :Tagbar<CR>
+
 "fzf
-map <F12> :LspDocumentSymbol<CR>
 noremap <leader>ff :<C-U><C-R>=printf("Files")<CR><CR>
 noremap <leader>fm :<C-U><C-R>=printf("History")<CR><CR>
 noremap <leader>fo :<C-U><C-R>=printf("BTags")<CR><CR>
@@ -251,7 +252,6 @@ if executable('gopls')
         \ })
 endif
 
-
 "补全
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
@@ -270,9 +270,9 @@ nmap w] :resize +2<CR>
 nmap w[ :resize -2<CR>
 nmap w- :vertical resize -2<CR>
 nmap w= :vertical resize +2<CR>
-noremap <C-j> :cn<CR>
-noremap <C-k> :cp<CR>
-noremap <S-q> :windo lcl\|ccl<CR>
+noremap <expr> <C-k> empty(filter(getwininfo(), 'v:val.loclist')) ? ':cp<CR>' : ':lprev<CR>'
+noremap <expr> <C-j> empty(filter(getwininfo(), 'v:val.loclist')) ? ':cn<CR>' : ':lnext<CR>'
+noremap <expr> <S-q> empty(filter(getwininfo(), 'v:val.loclist')) ? ':cclose<CR>' : ':lclose<CR>'
 noremap <leader>cpf :let @+ = expand('%:p')<CR>
 noremap <leader>cpw :let @+ = expand('%').expand('::').expand('<cWORD>')<CR>
 autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE " transparent bg
