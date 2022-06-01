@@ -116,8 +116,7 @@ Plugin 'junegunn/gv.vim'
 Plugin 'airblade/vim-gitgutter'
 
 Plugin 'nvim-lualine/lualine.nvim'
-Plugin 'romgrk/barbar.nvim'
-Plugin 'kyazdani42/nvim-web-devicons'
+Plugin 'akinsho/bufferline.nvim', { 'tag': 'v2.*' }
 
 Plugin 'ryanoasis/vim-devicons'
 
@@ -251,32 +250,32 @@ EOF
 colorscheme catppuccin
 
 " github-nvim-theme
-"lua << EOF
-"require('github-theme').setup({
-"    transparent = true,
-"    --theme_style = "dark_default",
-"    theme_style = "dark",
-"    --theme_style = "dark_colorblind",
-"    --theme_style = "light",
-"    --theme_style = "light_default",
-"    --theme_style = "light_colorblind",
-"    --theme_style = "dimmed",
-"    -- other config
-"    sidebars = {"qf", "vista_kind", "terminal", "packer"},
-"    -- Change the "hint" color to the "orange" color, and make the "error" color bright red
-"    colors = {hint = "orange", error = "#ff0000"},
-
-"    -- Overwrite the highlight groups
-"    overrides = function(c)
-"    return {
-"        htmlTag = {fg = c.red, bg = "#282c34", sp = c.hint, style = "underline"},
-"        DiagnosticHint = {link = "LspDiagnosticsDefaultHint"},
-"        -- this will remove the highlight groups
-"        TSField = {},
-"        }
-"    end
-"})
-"EOF
+lua << EOF
+--require('github-theme').setup({
+--    transparent = true,
+--    --theme_style = "dark_default",
+--    theme_style = "dark",
+--    --theme_style = "dark_colorblind",
+--    --theme_style = "light",
+--    --theme_style = "light_default",
+--    --theme_style = "light_colorblind",
+--    --theme_style = "dimmed",
+--    -- other config
+--    sidebars = {"qf", "vista_kind", "terminal", "packer"},
+--    -- Change the "hint" color to the "orange" color, and make the "error" color bright red
+--    colors = {hint = "orange", error = "#ff0000"},
+--
+--    -- Overwrite the highlight groups
+--    overrides = function(c)
+--    return {
+--        htmlTag = {fg = c.red, bg = "#282c34", sp = c.hint, style = "underline"},
+--        DiagnosticHint = {link = "LspDiagnosticsDefaultHint"},
+--        -- this will remove the highlight groups
+--        TSField = {},
+--        }
+--    end
+--})
+EOF
 
 "tagbar
 map <F12> :Tagbar<CR>
@@ -582,16 +581,86 @@ ins_right {
 -- Now don't forget to initialize lualine
 lualine.setup(config)
 EOF
-" barbar 
-" NOTE: If barbar's option dict isn't created yet, create it
-let bufferline = get(g:, 'bufferline', {})
-let bufferline.add_in_buffer_number_order = v:true
-" If true, new buffers will be inserted at the start/end of the list.
-" Default is to insert after current buffer.
-let bufferline.insert_at_start = v:false
-let bufferline.insert_at_end = v:true
+" bufferline
 lua << EOF
+
+require('bufferline').setup {
+  options = {
+    mode = "buffers", -- set to "tabs" to only show tabpages instead
+    numbers = "buffer_id",
+    close_command = "bdelete! %d",       -- can be a string | function, see "Mouse actions"
+    right_mouse_command = nil, -- can be a string | function, see "Mouse actions"
+    left_mouse_command = "buffer %d",    -- can be a string | function, see "Mouse actions"
+    middle_mouse_command = nil,          -- can be a string | function, see "Mouse actions"
+    -- NOTE: this plugin is designed with this icon in mind,
+    -- and so changing this is NOT recommended, this is intended
+    -- as an escape hatch for people who cannot bear it for whatever reason
+    indicator_icon = '▎',
+    buffer_close_icon = '',
+    modified_icon = '●',
+    close_icon = '',
+    left_trunc_marker = '',
+    right_trunc_marker = '',
+    --- name_formatter can be used to change the buffer's label in the bufferline.
+    --- Please note some names can/will break the
+    --- bufferline so use this at your discretion knowing that it has
+    --- some limitations that will *NOT* be fixed.
+    name_formatter = function(buf)  -- buf contains a "name", "path" and "bufnr"
+      -- remove extension from markdown files for example
+      if buf.name:match('%.md') then
+        return vim.fn.fnamemodify(buf.name, ':t:r')
+      end
+    end,
+    max_name_length = 25,
+    max_prefix_length = 15, -- prefix used when a buffer is de-duplicated
+    tab_size = 18,
+    diagnostics = "nvim_lsp",
+    diagnostics_update_in_insert = true,
+    diagnostics_indicator = function(count, level, diagnostics_dict, context)
+      return "("..count..")"
+    end,
+    -- NOTE: this will be called a lot so don't do any heavy processing here
+    custom_filter = function(buf_number, buf_numbers)
+      -- filter out filetypes you don't want to see
+      if vim.bo[buf_number].filetype ~= "<i-dont-want-to-see-this>" then
+        return true
+      end
+      -- filter out by buffer name
+      if vim.fn.bufname(buf_number) ~= "<buffer-name-I-dont-want>" then
+        return true
+      end
+      -- filter out based on arbitrary rules
+      -- e.g. filter out vim wiki buffer from tabline in your work repo
+      if vim.fn.getcwd() == "<work-repo>" and vim.bo[buf_number].filetype ~= "wiki" then
+        return true
+      end
+      -- filter out by it's index number in list (don't show first buffer)
+      if buf_numbers[1] ~= buf_number then
+        return true
+      end
+    end,
+    offsets = {{filetype = "NvimTree", text = "File Explorer" , text_align = "left"}},
+    color_icons = true, -- whether or not to add the filetype icon highlights
+    show_buffer_icons = true, -- disable filetype icons for buffers
+    show_buffer_close_icons = true,
+    show_buffer_default_icon = true, -- whether or not an unrecognised filetype should show a default icon
+    show_close_icon = true,
+    show_tab_indicators = true,
+    persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
+    -- can also be a table containing 2 custom separators
+    -- [focused and unfocused]. eg: { '|', '|' }
+    separator_style = "slant",
+    enforce_regular_tabs = false,
+    always_show_bufferline = true,
+    sort_by = "id"
+  }
+}
 EOF
+nnoremap <silent><leader>1 <Cmd>BufferLineGoToBuffer 1<CR>
+nnoremap <silent><leader>2 <Cmd>BufferLineGoToBuffer 2<CR>
+nnoremap <silent><leader>3 <Cmd>BufferLineGoToBuffer 3<CR>
+nnoremap <silent><leader>4 <Cmd>BufferLineGoToBuffer 4<CR>
+nnoremap <silent><leader>5 <Cmd>BufferLineGoToBuffer 5<CR>
 
 "目录收藏默认打开
 let NERDTreeShowBookmarks=1
