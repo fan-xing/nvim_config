@@ -114,6 +114,7 @@ Plugin 'preservim/tagbar'
 Plugin 'tpope/vim-fugitive'
 Plugin 'junegunn/gv.vim'
 Plugin 'airblade/vim-gitgutter'
+Plugin 'f-person/git-blame.nvim'
 
 Plugin 'nvim-lualine/lualine.nvim'
 Plugin 'akinsho/bufferline.nvim', { 'tag': 'v2.*' }
@@ -583,7 +584,6 @@ lualine.setup(config)
 EOF
 " bufferline
 lua << EOF
-
 require('bufferline').setup {
   options = {
     mode = "buffers", -- set to "tabs" to only show tabpages instead
