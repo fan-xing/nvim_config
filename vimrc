@@ -172,7 +172,7 @@ set laststatus=2
 "let g:airline_theme='jellybeans'
 "let g:airline_theme='wombat'
 let g:airline_theme='purify'
-"let g:airline_theme='dracula'
+" let g:airline_theme='dracula'
 "let g:airline_theme='molokai'
 "let g:airline_theme='base16'
 "let g:airline_theme='onedark'
@@ -182,6 +182,7 @@ let g:airline_skip_empty_sections = 1
 let g:airline#extensions#whitespace#enabled = 0 
 let g:airline#extensions#tagbar#enabled = 1
 "使用 powerline 外观
+
 let g:airline_powerline_fonts = 1
 let g:airline_left_sep = "\uE0B4"
 let g:airline_right_sep = ""

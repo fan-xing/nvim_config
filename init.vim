@@ -115,6 +115,7 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'junegunn/gv.vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'f-person/git-blame.nvim'
+let g:gitblame_ignored_filetypes = ['nerdtree']
 
 Plugin 'nvim-lualine/lualine.nvim'
 Plugin 'akinsho/bufferline.nvim', { 'tag': 'v2.*' }
@@ -134,6 +135,8 @@ Plugin 'ap/vim-css-color'
 
 Plugin 'nvim-lua/plenary.nvim'
 Plugin 'nvim-telescope/telescope.nvim'
+" todo
+Plugin 'folke/todo-comments.nvim'
 
 " 翻译
 Plugin 'voldikss/vim-translator'
@@ -149,7 +152,9 @@ Plugin 'navarasu/onedark.nvim'
 Plugin 'catppuccin/nvim', {'name': 'catppuccin'}
 Plugin 'marko-cerovac/material.nvim'
 Plugin 'kyoz/purify', { 'rtp': 'vim' }
-Plugin 'dracula/vim', { 'name': 'dracula' }
+Plugin 'Mofiqul/dracula.nvim'
+Plugin 'folke/tokyonight.nvim', { 'branch': 'main' }
+"Plugin 'xiyaowong/nvim-transparent'
 
 "平滑移动
 Plugin 'psliwka/vim-smoothie'
@@ -157,98 +162,123 @@ Plugin 'psliwka/vim-smoothie'
 call vundle#end()            " 这是必需的
 filetype plugin indent on    " 这是必需的
 
-"todo
-
 "主题也搞一下吧
 set t_Co=256
+let g:tokyonight_style = "night"
+let g:tokyonight_transparent = 1
+let g:tokyonight_transparent_sidebar = 1
+let g:tokyonight_italic_functions = 1
+let g:tokyonight_italic_variables = 1
+colorscheme tokyonight
 " colorscheme dracula
 
 " onedark主题
-"lua << EOF
-"-- require('onedark').setup {
-"--     style = 'darker',
-"--     colors = {
-"--         bright_orange = "#ff8800",    -- define a new color
-"--         green = '#00ffaa',            -- redefine an existing color
-"--         },
-"--     highlights = {
-"--         TSKeyword = {fg = '$green'},
-"--         TSString = {fg = '$bright_orange', bg = '#00ff00', fmt = 'bold'},
-"--         TSFunction = {fg = '#0000ff', sp = '$cyan', fmt = 'underline,italic'},
-"--         }
-"--     }
-"-- require('onedark').load()
-"EOF
+lua << EOF
+require('onedark').setup  {
+    -- Main options --
+    style = 'deep', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
+    transparent = true,  -- Show/hide background
+    term_colors = true, -- Change terminal color as per the selected theme style
+    ending_tildes = false, -- Show the end-of-buffer tildes. By default they are hidden
+    cmp_itemkind_reverse = false, -- reverse item kind highlights in cmp menu
+    -- toggle theme style ---
+    toggle_style_key = '<leader>ts', -- Default keybinding to toggle
+    toggle_style_list = {'dark', 'darker', 'cool', 'deep', 'warm', 'warmer', 'light'}, -- List of styles to toggle between
+
+    -- Change code style ---
+    -- Options are italic, bold, underline, none
+    -- You can configure multiple style with comma seperated, For e.g., keywords = 'italic,bold'
+    code_style = {
+        comments = 'italic',
+        keywords = 'NONE',
+        functions = 'NONE',
+        strings = 'italic',
+        variables = 'NONE'
+    },
+
+    -- Custom Highlights --
+    colors = {}, -- Override default colors
+    highlights = {}, -- Override highlight groups
+
+    -- Plugins Config --
+    diagnostics = {
+        darker = false, -- darker colors for diagnostic
+        undercurl = true,   -- use undercurl instead of underline for diagnostics
+        background = true,    -- use background color for virtual text
+    },
+}
+--require('onedark').load()
+EOF
 
 "catppuccin
-lua << EOF
-local catppuccin = require("catppuccin")
--- configure it
-catppuccin.setup{
-transparent_background = true,
-term_colors = false,
-styles = {
-   comments = "italic",
-   functions = "italic",
-   keywords = "italic",
-   strings = "italic",
-   variables = "italic",
-},
-integrations = {
-   treesitter = true,
-   native_lsp = {
-       enabled = true,
-       virtual_text = {
-           errors = "italic",
-           hints = "italic",
-           warnings = "italic",
-           information = "italic",
-       },
-       underlines = {
-           errors = "underline",
-           hints = "underline",
-           warnings = "underline",
-           information = "underline",
-       },
-   },
-   lsp_trouble = false,
-   cmp = true,
-   lsp_saga = false,
-   gitgutter = true,
-   gitsigns = true,
-   telescope = true,
-   nvimtree = {
-       enabled = true,
-       show_root = true,
-       transparent_panel = false,
-   },
-   neotree = {
-       enabled = false,
-       show_root = false,
-       transparent_panel = false,
-   },
-   which_key = false,
-   indent_blankline = {
-       enabled = true,
-       colored_indent_levels = true,
-   },
-   dashboard = true,
-   neogit = false,
-   vim_sneak = false,
-   fern = false,
-   barbar = false,
-   bufferline = true,
-   markdown = true,
-   lightspeed = false,
-   ts_rainbow = true,
-   hop = false,
-   notify = true,
-   telekasten = true,
-   symbols_outline = false,
-}
-}
-EOF
-colorscheme catppuccin
+" lua << EOF
+" local catppuccin = require("catppuccin")
+" -- configure it
+" catppuccin.setup{
+" transparent_background = true,
+" term_colors = false,
+" styles = {
+"    comments = "italic",
+"    functions = "italic",
+"    keywords = "italic",
+"    strings = "italic",
+"    variables = "italic",
+" },
+" integrations = {
+"    treesitter = true,
+"    native_lsp = {
+"        enabled = true,
+"        virtual_text = {
+"            errors = "italic",
+"            hints = "italic",
+"            warnings = "italic",
+"            information = "italic",
+"        },
+"        underlines = {
+"            errors = "underline",
+"            hints = "underline",
+"            warnings = "underline",
+"            information = "underline",
+"        },
+"    },
+"    lsp_trouble = false,
+"    cmp = true,
+"    lsp_saga = false,
+"    gitgutter = true,
+"    gitsigns = true,
+"    telescope = true,
+"    nvimtree = {
+"        enabled = true,
+"        show_root = true,
+"        transparent_panel = false,
+"    },
+"    neotree = {
+"        enabled = false,
+"        show_root = false,
+"        transparent_panel = false,
+"    },
+"    which_key = false,
+"    indent_blankline = {
+"        enabled = true,
+"        colored_indent_levels = true,
+"    },
+"    dashboard = true,
+"    neogit = false,
+"    vim_sneak = false,
+"    fern = false,
+"    barbar = false,
+"    bufferline = true,
+"    markdown = true,
+"    lightspeed = false,
+"    ts_rainbow = true,
+"    hop = false,
+"    notify = true,
+"    telekasten = true,
+"    symbols_outline = false,
+" }
+" }
+" EOF
+" colorscheme catppuccin
 
 " github-nvim-theme
 lua << EOF
@@ -491,11 +521,11 @@ ins_left {
   padding = { right = 1 },
 }
 
-ins_left {
-  -- filesize component
-  'filesize',
-  cond = conditions.buffer_not_empty,
-}
+--ins_left {
+--  -- filesize component
+--  'filesize',
+--  cond = conditions.buffer_not_empty,
+--}
 
 ins_left { 'location' }
 
@@ -528,6 +558,8 @@ ins_left {
   icon = ' LSP:',
   color = { fg = '#ffffff', gui = 'bold' },
 }
+
+ins_left { 'filetype' }
 
 ins_left {
   'diagnostics',
@@ -586,73 +618,19 @@ EOF
 lua << EOF
 require('bufferline').setup {
   options = {
-    mode = "buffers", -- set to "tabs" to only show tabpages instead
-    numbers = "buffer_id",
-    close_command = "bdelete! %d",       -- can be a string | function, see "Mouse actions"
-    right_mouse_command = nil, -- can be a string | function, see "Mouse actions"
-    left_mouse_command = "buffer %d",    -- can be a string | function, see "Mouse actions"
-    middle_mouse_command = nil,          -- can be a string | function, see "Mouse actions"
-    -- NOTE: this plugin is designed with this icon in mind,
-    -- and so changing this is NOT recommended, this is intended
-    -- as an escape hatch for people who cannot bear it for whatever reason
-    indicator_icon = '▎',
-    buffer_close_icon = '',
-    modified_icon = '●',
-    close_icon = '',
-    left_trunc_marker = '',
-    right_trunc_marker = '',
-    --- name_formatter can be used to change the buffer's label in the bufferline.
-    --- Please note some names can/will break the
-    --- bufferline so use this at your discretion knowing that it has
-    --- some limitations that will *NOT* be fixed.
-    name_formatter = function(buf)  -- buf contains a "name", "path" and "bufnr"
-      -- remove extension from markdown files for example
-      if buf.name:match('%.md') then
-        return vim.fn.fnamemodify(buf.name, ':t:r')
-      end
-    end,
-    max_name_length = 25,
+    max_name_length = 40,
     max_prefix_length = 15, -- prefix used when a buffer is de-duplicated
     tab_size = 18,
+    diagnostics_update_in_insert = false,
     diagnostics = "nvim_lsp",
     diagnostics_update_in_insert = true,
     diagnostics_indicator = function(count, level, diagnostics_dict, context)
-      return "("..count..")"
+      local icon = level:match("error") and "" or ""
+      return " " .. icon .. count
     end,
-    -- NOTE: this will be called a lot so don't do any heavy processing here
-    custom_filter = function(buf_number, buf_numbers)
-      -- filter out filetypes you don't want to see
-      if vim.bo[buf_number].filetype ~= "<i-dont-want-to-see-this>" then
-        return true
-      end
-      -- filter out by buffer name
-      if vim.fn.bufname(buf_number) ~= "<buffer-name-I-dont-want>" then
-        return true
-      end
-      -- filter out based on arbitrary rules
-      -- e.g. filter out vim wiki buffer from tabline in your work repo
-      if vim.fn.getcwd() == "<work-repo>" and vim.bo[buf_number].filetype ~= "wiki" then
-        return true
-      end
-      -- filter out by it's index number in list (don't show first buffer)
-      if buf_numbers[1] ~= buf_number then
-        return true
-      end
-    end,
-    offsets = {{filetype = "NvimTree", text = "File Explorer" , text_align = "left"}},
-    color_icons = true, -- whether or not to add the filetype icon highlights
-    show_buffer_icons = true, -- disable filetype icons for buffers
-    show_buffer_close_icons = true,
-    show_buffer_default_icon = true, -- whether or not an unrecognised filetype should show a default icon
-    show_close_icon = true,
-    show_tab_indicators = true,
-    persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
-    -- can also be a table containing 2 custom separators
-    -- [focused and unfocused]. eg: { '|', '|' }
-    separator_style = "slant",
-    enforce_regular_tabs = false,
-    always_show_bufferline = true,
-    sort_by = "id"
+    offsets = {
+        {filetype = "nerdtree", text = "File Explorer" , text_align = "left"}
+    },
   }
 }
 EOF
@@ -737,6 +715,7 @@ let g:NERDSpaceDelims=1
 let g:NERDDefaultAlign = 'left'
 "删除注释尾部空格 
 let g:NERDTrimTrailingWhitespace = 1
+let g:NERDCustomDelimiters = { 'php': { 'left': '/**','right': '**/' } }
 
 "翻译
 let g:translator_default_engines = ['bing','google']
@@ -793,6 +772,65 @@ require'nvim-treesitter.configs'.setup {
 }
 EOF
 
+" todo
+lua << EOF
+require("todo-comments").setup {
+  signs = false, -- show icons in the signs column
+  sign_priority = 8, -- sign priority
+  -- keywords recognized as todo comments
+  keywords = {
+    FIX = {
+      icon = " ", -- icon used for the sign, and in search results
+      color = "error", -- can be a hex color, or a named color (see below)
+      alt = { "FIXME", "BUG", "FIXIT", "ISSUE" ,"FIX","fixme", "bug", "fixit", "issue" ,"fix"}, -- a set of other keywords that all map to this FIX keywords
+      -- signs = false, -- configure signs for some keywords individually
+    },
+    TODO = { icon = " ", color = "info" ,alt = {"todo"}},
+    HACK = { icon = " ", color = "warning" },
+    WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
+    PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
+    NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
+  },
+  merge_keywords = true, -- when true, custom keywords will be merged with the defaults
+  -- highlighting of the line containing the todo comment
+  -- * before: highlights before the keyword (typically comment characters)
+  -- * keyword: highlights of the keyword
+  -- * after: highlights after the keyword (todo text)
+  highlight = {
+    before = "", -- "fg" or "bg" or empty
+    keyword = "bg", -- "fg", "bg", "wide" or empty. (wide is the same as bg, but will also highlight surrounding characters)
+    after = "bg", -- "fg" or "bg" or empty
+    pattern = [[.*<(KEYWORDS)\s*:]], -- pattern or table of patterns, used for highlightng (vim regex)
+    comments_only = true, -- uses treesitter to match keywords in comments only
+    max_line_len = 400, -- ignore lines longer than this
+    exclude = {}, -- list of file types to exclude highlighting
+  },
+  -- list of named colors where we try to extract the guifg from the
+  -- list of hilight groups or use the hex color if hl not found as a fallback
+  colors = {
+    error = { "DiagnosticError", "ErrorMsg", "#DC2626" },
+    warning = { "DiagnosticWarning", "WarningMsg", "#FBBF24" },
+    info = { "DiagnosticInfo", "#2563EB" },
+    hint = { "DiagnosticHint", "#10B981" },
+    default = { "Identifier", "#7C3AED" },
+  },
+  search = {
+    command = "rg",
+    args = {
+      "--color=never",
+      "--no-heading",
+      "--with-filename",
+      "--line-number",
+      "--column",
+    },
+    -- regex that will be used to match keywords.
+    -- don't replace the (KEYWORDS) placeholder
+    -- pattern = [[\b(KEYWORDS)]], -- ripgrep regex
+    pattern = [[\b(KEYWORDS)\b]], -- match without the extra colon. You'll likely get false positives
+  },
+}
+EOF
+
 " 自定义快捷键
 noremap <leader>fw :<C-U><C-R>=printf("/%s\\C", expand("<cword>"))<CR><CR>
 noremap <leader>nh :<C-U><C-R>=printf("noh")<CR><CR>
@@ -810,4 +848,4 @@ noremap <expr> <C-j> empty(filter(getwininfo(), 'v:val.loclist')) ? ':cn<CR>' : 
 noremap <expr> <S-q> empty(filter(getwininfo(), 'v:val.loclist')) ? ':cclose<CR>' : ':lclose<CR>'
 noremap <leader>cpf :let @+ = expand('%:p')<CR>
 noremap <leader>cpw :let @+ = expand('%').expand('::').expand('<cWORD>')<CR>
-autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE " transparent bg
+inoremap <C-c> <Esc>
